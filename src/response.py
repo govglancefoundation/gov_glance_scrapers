@@ -3,7 +3,8 @@ import os
 import xmltodict
 from scrapeops_python_requests.scrapeops_requests import ScrapeOpsRequests
 from database import ReadArticles, WriteItems
-
+from rss import ParseXml
+from bs4 import BeautifulSoup
 
 def get_needed_items(link: str, table: str, link_variable_name: str, topic: str):
     title = table.title()
@@ -17,8 +18,10 @@ def get_needed_items(link: str, table: str, link_variable_name: str, topic: str)
         requests = scrapeops_logger.RequestsWrapper()
 
         response = requests.get(link)
-        content = xmltodict.parse(response.content)
-        data = (content['rss']['channel']['item'])
+        soup = BeautifulSoup(response.content, features="xml")
+        soup.find_all('item')
+        data = ParseXml(soup.find_all('item')).getItems()
+        print(data)
     except Exception as e:
             logging.critical("Critical: Issue data, requests, or scrapeops! : %s", str(e))
             

@@ -1,5 +1,3 @@
-from datetime import datetime
-startTime = datetime.now()
 from process import clean_items
 from response import get_needed_items
 from notification import SendNotification
@@ -21,16 +19,13 @@ def main():
     number_of_items = len(items)
     cleaned = clean_items(items)
     print(cleaned)
-    notify = SendNotification(topic)
-    recent = notify.get_recent_value(cleaned)
-    message = notify.message(cleaned, recent['title'])
-    notify.notification_push(table, message)
+    # WriteItems().process_item(cleaned, table)
+    # notify = SendNotification(topic)
+    # recent = notify.get_recent_value(cleaned)
+    # message = notify.message(cleaned, recent['title'])
+    # notify.notification_push(table, message)
     
     logging.info(f'The total items needed are: {number_of_items}')
 
-
-
 if __name__ == '__main__':
     main()
-
-print(datetime.now() - startTime)

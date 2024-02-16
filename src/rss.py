@@ -10,6 +10,55 @@ from xml.dom import minidom
 One issue is trying to figure out how to get the xml in the right location
 '''
 
+def xml_tags(content):
+    tagNames = []
+    # tagNames.append(idColumnName)
+    for item in content:
+        allTags = item.find_all()
+        for tag in allTags:
+            if tag.name not in tagNames:
+                tagNames.append(tag.name)
+    return [x.lower() for x in tagNames]
+
+'''
+When we parse the xml file we need to spit out a dictionary when we are done parsing. This will allow the pipeline to work without any issues. 
+
+xmltodict is not working for parsing the speeches_statements xml feed.
+'''
+
+class ParseXml:
+    def __init__(self, content):
+        self.content = content
+
+    
+    def getTags(self):
+        tagNames = []
+        # tagNames.append(idColumnName)
+        for item in self.content:
+            allTags = item.find_all()
+            for tag in allTags:
+                if tag.name not in tagNames:
+                    tagNames.append(tag.name)
+        return [x.lower() for x in tagNames]
+
+    def getItems(self):
+        # initialize list
+        itemList = []
+        # iterate through items in rss feed
+        for item in self.content:
+            
+            # initialize dict
+            itemDict = {}
+            # Make sure to look for all the tags in content
+            allTags = item.find_all()
+            for tag in allTags:
+                # make sure to look for all the tags with the name guid
+                editText = tag.text.replace('\n', '')
+                itemDict[tag.name] = editText 
+                # here we need to look through the text and check if there are any editing tags and styling 
+            itemList.append(itemDict)
+        return itemList
+
 class ReadArticles:
 
     def __init__(self):
@@ -90,7 +139,7 @@ def generate_xml(data):
 I think it would make sense to create a different file/project that takes a list of all the table in a schema and then runs this function so anytime there is a new item being added the xml file is updated
 """
 
-print(generate_xml(data=(ReadArticles().items_to_dict('bea'))))
+# print(generate_xml(data=(ReadArticles().items_to_dict('bea'))))
 
 print(datetime.now() - startTime)
 
