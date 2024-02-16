@@ -51,11 +51,12 @@ class CleanUpProcess:
             if key == 'description':
                 item[key] = clean_description(val)
             if key == 'created_at':
-                item[key] = dateutil.parser.parse(val)
+                item[key] = str(dateutil.parser.parse(val))
             if key == 'guid':
                 if isinstance(val, dict):
                     item[key] = val['#text']
             if key == 'title':
+                val = clean_description(val)
                 item[key] = val.title()
 
         return item

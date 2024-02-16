@@ -1,14 +1,10 @@
-from datetime import datetime
-startTime = datetime.now()
 import psycopg2
 import os
 import logging
 from xml.etree.ElementTree import Element, tostring
 from xml.dom import minidom
 
-'''
-One issue is trying to figure out how to get the xml in the right location
-'''
+
 
 def xml_tags(content):
     tagNames = []
@@ -22,7 +18,6 @@ def xml_tags(content):
 
 '''
 When we parse the xml file we need to spit out a dictionary when we are done parsing. This will allow the pipeline to work without any issues. 
-
 xmltodict is not working for parsing the speeches_statements xml feed.
 '''
 
@@ -50,6 +45,9 @@ class ParseXml:
             # initialize dict
             itemDict = {}
             # Make sure to look for all the tags in content
+            a_tag = item.find('a')
+            if a_tag:
+                a_tag.decompose()
             allTags = item.find_all()
             for tag in allTags:
                 # make sure to look for all the tags with the name guid
@@ -88,58 +86,3 @@ class ReadArticles:
         except Exception as e:
             logging.critical("Critical : %s", str(e))
             raise SystemExit(-1)
-        
-def dict_to_xml(tag: str, d: dict):
-    '''
-    Turn a simple dict of key/value pairs into XML
-    '''
-    elem = Element(tag)
-    for key, val in d.items():
-        child = Element(key)
-        child.text = str(val)
-        elem.append(child)
-    return elem
-    # elem = Element(tag)
-    # for key, val in d.items():
-    #     if val != None:
-    #         val = val
-    #     else:
-    #         val = ''
-    #     child = Element(key)
-    #     child.text = str(val)
-    #     elem.append(child)
-    # return elem
-
-# def generate_xml(dir,file_name,content):
-def list_of_dicts_to_xml(tag, l):
-        root = Element(tag)
-        for d in l:
-            root.append(dict_to_xml('item', d))
-        return root
-        # name_lower = file_name.lower()
-        # name_no_underscore = file_name.replace('_', ' ')
-        # xml_data = [f'<rss version = "2.0" encoding="utf-8">\n<channel>\n\t<title>{name_no_underscore}</title>\n\t<link>govglance.org</link>\n\t<description/>\n\t<language>en</language>\n']
-        # for i in content:
-        #     e = dict_to_xml('item', i)
-        #     pretty = minidom.parseString(tostring(e)).toprettyxml(indent="\t\t").replace('<?xml version="1.0" ?>','').replace('<item>','\t<item>').replace('</item>', '\t</item>')
-        #     xml_data.append(pretty)
-
-        # ending = ('\n</channel>\n\n</rss>')
-        # xml_data.append(ending)
-        # return xml_data
-
-def generate_xml(data):
-    xml_root = list_of_dicts_to_xml('item', data)
-
-    # Save XML content to a list
-    xml_list = []
-    xml_list.append(tostring(xml_root))
-    return xml_list[0]
-"""
-I think it would make sense to create a different file/project that takes a list of all the table in a schema and then runs this function so anytime there is a new item being added the xml file is updated
-"""
-
-# print(generate_xml(data=(ReadArticles().items_to_dict('bea'))))
-
-print(datetime.now() - startTime)
-

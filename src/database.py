@@ -1,6 +1,7 @@
 import os
 import psycopg2
 import logging
+from datetime import datetime
 
 class ReadArticles:
 
@@ -20,7 +21,6 @@ class ReadArticles:
             table = name.lower()
             self.cur.execute(f"""SELECT url FROM {self.schema}.{table} WHERE url = '{url}'""")
             results = [i[0] for i in self.cur.fetchall()]
-            # print(results)
             if results:
                 return True
             else:
@@ -43,18 +43,19 @@ class WriteItems:
         self.cur = self.connection.cursor()
 
 
-    def process_item(self, item, table): # Here we are going to get a dictionary or dataframe and publish new data
-        try:
+    def process_item(self, items, table): # Here we are going to get a dictionary or dataframe and publish new data
+        for item in items:
+            try:
 
-            table_name = table.lower().replace(' ', '_')
-            schema = self.schema
-            columns = ', '.join(item.keys())
-            values = ', '.join('%({})s'.format(key) for key in item.keys())
-            # values = ', '.join('%({})s'.format(key) if not 'references' else 'ARRAY[%({})s]::TEXT[]'.format(key) for key in item.keys())
-            query = f"INSERT INTO {schema}.{table_name} ({columns}) VALUES ({values})"
-            # print(query)
-            self.cur.execute(query, item)
-            self.connection.commit()
-        except Exception as e:
-            logging.critical("Critical : %s", str(e))
-
+                table_name = table.lower().replace(' ', '_')
+                schema = self.schema
+                columns = ', '.join(item.keys())
+                values = ', '.join('%({})s'.format(key) for key in item.keys())
+                # values = ', '.join('%({})s'.format(key) if not 'references' else 'ARRAY[%({})s]::TEXT[]'.format(key) for key in item.keys())
+                query = f"INSERT INTO {schema}.{table_name} ({columns}) VALUES ({values})"
+                
+                self.cur.execute(query, item)
+                self.connection.commit()
+                logging.info(f"Value inserted {query}")
+            except Exception as e:
+                logging.critical("Critical : %s", str(e))

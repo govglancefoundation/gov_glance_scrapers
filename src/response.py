@@ -21,7 +21,6 @@ def get_needed_items(link: str, table: str, link_variable_name: str, topic: str)
         soup = BeautifulSoup(response.content, features="xml")
         soup.find_all('item')
         data = ParseXml(soup.find_all('item')).getItems()
-        print(data)
     except Exception as e:
             logging.critical("Critical: Issue data, requests, or scrapeops! : %s", str(e))
             
@@ -31,13 +30,13 @@ def get_needed_items(link: str, table: str, link_variable_name: str, topic: str)
     
     needed = []
     for item in data:
-            scrapped = ReadArticles().check_item(table, item[link_variable_name])
-            if scrapped == False:
-                logging.info(f'New item found{item}')
-                print(item['link'])
-                scrapeops_logger.item_scraped(
-                    response=response,
-                    item=item,
-                )
-                needed.append(item)
+        scrapped = ReadArticles().check_item(table, item[link_variable_name])
+        if scrapped == False:
+            logging.info(f'New item found{item}')
+            print(item['link'])
+            scrapeops_logger.item_scraped(
+                response=response,
+                item=item,
+            )
+            needed.append(item)
     return needed
