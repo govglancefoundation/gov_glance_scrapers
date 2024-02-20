@@ -12,10 +12,6 @@ def main():
     link_variable_name = 'link'
     notification_title = 'S.E.C. Speeches Statements'
 
-    logging.basicConfig(level=logging.INFO,filename=f"log/{table}.log", 
-                        format='%(asctime)s - %(message)s', 
-                        filemode='a')
-
     items = (get_needed_items(url, table, link_variable_name, topic))
     if len(items) > 0:
         number_of_items = len(items)

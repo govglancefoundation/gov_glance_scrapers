@@ -9,6 +9,13 @@ from bs4 import BeautifulSoup
 
 load_dotenv()
 
+
+logging.basicConfig(
+                    level=logging.INFO,filename=f"/var/log/cron.log",
+                    # level=logging.INFO,filename=f"log/cronjob.log", 
+                    format='%(asctime)s - %(message)s', 
+                    filemode='a')
+
 def get_needed_items(link: str, table: str, link_variable_name: str, topic: str):
     title = table.title()
     topic = topic.title()
