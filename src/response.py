@@ -1,10 +1,13 @@
 import logging
+from dotenv import load_dotenv
 import os
 import xmltodict
 from scrapeops_python_requests.scrapeops_requests import ScrapeOpsRequests
 from database import ReadArticles, WriteItems
 from rss import ParseXml
 from bs4 import BeautifulSoup
+
+load_dotenv()
 
 def get_needed_items(link: str, table: str, link_variable_name: str, topic: str):
     title = table.title()
