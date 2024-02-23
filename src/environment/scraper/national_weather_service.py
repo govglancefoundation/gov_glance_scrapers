@@ -35,7 +35,7 @@ def main():
     for item in data:
         scrapped = ReadArticles().check_item(table, item[link_variable_name])
         if scrapped == False:
-            # item = resp.log_item(item, response)
+            item = resp.log_item(item, response)
             items.append(item)
 
     if len(items) > 0:
@@ -43,7 +43,7 @@ def main():
         print(number_of_items)
         cleaned = clean_items(items)
         print(cleaned)
-        # WriteItems().process_item(cleaned, table, topic)
+        WriteItems().process_item(cleaned, table, topic)
         notify = SendNotification(topic)
         recent = notify.get_recent_value(cleaned)
         message = notify.message(cleaned, recent['title'])
