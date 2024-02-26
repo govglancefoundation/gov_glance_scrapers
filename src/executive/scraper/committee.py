@@ -8,7 +8,7 @@ import xml.etree.ElementTree as ET
 
 def main():
     url = "https://docs.house.gov/Committee/RSS.ashx?Code=IG00"
-    table = 'state'
+    table = 'permanent_select_committee_on_intelligence'
     topic = 'executive'
     link_variable_name = 'link'
     notification_title = 'Dept. of State Updates'
@@ -22,7 +22,7 @@ def main():
     """
     Edit the XML based on your needs
     """
-    for item in xml_string:
+    for item in xml_string[:1]:
         print(item)
         entry_data = {}
         # Make sure to look for all the tags in content
@@ -36,6 +36,7 @@ def main():
         data.append(entry_data)
     items = []
     for item in data:
+        logging.info(f"Checking {table} table in the database for results")
         scrapped = ReadArticles().check_item(table, item[link_variable_name])
         if scrapped == False:
             item = resp.log_item(item, response)
