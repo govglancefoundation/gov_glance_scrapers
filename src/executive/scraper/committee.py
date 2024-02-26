@@ -11,7 +11,7 @@ def main():
     table = 'permanent_select_committee_on_intelligence'
     topic = 'executive'
     link_variable_name = 'link'
-    notification_title = 'Dept. of State Updates'
+    notification_title = 'Committee on Intelligence Updates'
     item_name = 'item'
     
     resp = Response(table, topic, url, link_variable_name, item_name)
@@ -22,7 +22,7 @@ def main():
     """
     Edit the XML based on your needs
     """
-    for item in xml_string[:1]:
+    for item in xml_string:
         print(item)
         entry_data = {}
         # Make sure to look for all the tags in content
