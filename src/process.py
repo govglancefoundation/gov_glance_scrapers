@@ -1,7 +1,7 @@
 import re
 import dateutil.parser
 import logging
-
+import html
 def camel_to_snake_case(key):
     """
     Convert camelCase string to snake_case, keeping only letters and numbers.
@@ -39,6 +39,10 @@ def clean_description(description):
     cleaned_description = re.sub(r'<[^>]*>', ' ', cleaned_description)
     # Remove extra whitespaces and newline characters
     cleaned_description = re.sub(r'\s+', ' ', cleaned_description)
+    pattern = r'^p(.*?)\/p$'
+    match = re.match(pattern, cleaned_description)
+    if match:
+        cleaned_description =match.group(1)
     # Remove leading and trailing whitespaces
     cleaned_description = cleaned_description.strip()
     return cleaned_description
@@ -49,7 +53,9 @@ class CleanUpProcess:
     def process_item(self, item):
         for key, val in item.items():
             if key == 'description':
-                item[key] = clean_description(val)
+                item[key] = str(clean_description(html.unescape(val)))
+            if key == 'encoded':
+                item[key] = str(clean_description(html.unescape(val)))
             if key == 'created_at':
                 item[key] = str(dateutil.parser.parse(val))
             if key == 'guid':
@@ -58,7 +64,6 @@ class CleanUpProcess:
             if key == 'title':
                 val = clean_description(val)
                 item[key] = val.title()
-
         return item
     
 def clean_items(content: list):

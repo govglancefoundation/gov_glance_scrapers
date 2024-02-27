@@ -3,8 +3,10 @@ from firebase_admin import credentials, messaging
 
 
 class SendNotification:
-    def __init__(self, topic):
-        self.topic = topic
+    def __init__(self):
+        cred = credentials.Certificate(
+            f"firebase2/gov-glance-firebase-adminsdk-3osxk-6fc6be7677.json")
+        firebase_admin.initialize_app(cred)
 
     def get_recent_value(self, items):
         items.sort(key = lambda x:x['created_at'])
@@ -16,19 +18,19 @@ class SendNotification:
         else:
             notification_message = f'{recent_value[:80]}... and {len(items)-1} more are available to read!'
         return notification_message
-    
-    def notification_push(self,title, body):
-        cred = credentials.Certificate(
-            f"firebase2/gov-glance-firebase-adminsdk-3osxk-6fc6be7677.json")
-        firebase_admin.initialize_app(cred)
 
-        topic = f'{self.topic}News'
+    def notification_push(self,topic, notifcation_title, body):
+        # cred = credentials.Certificate(
+        #     f"firebase2/gov-glance-firebase-adminsdk-3osxk-6fc6be7677.json")
+        # firebase_admin.initialize_app(cred)
+
+        topic = f'{topic}News'
         # topic = 'test'
 
         message = messaging.Message(
             notification=messaging.Notification(
-                title=title, body=body),
+                title=notifcation_title, body=body),
             topic=topic,
         )
-        # print(message)
-        messaging.send(message)
+        print(message)
+        # messaging.send(message)

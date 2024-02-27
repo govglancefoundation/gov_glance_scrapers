@@ -62,10 +62,9 @@ def main():
         cleaned = clean_items(items)
         print(cleaned)
         WriteItems().process_item(cleaned, table, topic)
-        notify = SendNotification(topic)
         recent = notify.get_recent_value(cleaned)
         message = notify.message(cleaned, recent['title'])
-        notify.notification_push(notification_title, str(message))
+        notify.notification_push(topic,notification_title, str(message))
         
         logging.info(f'The total items needed are: {number_of_items}')
     else:

@@ -3,7 +3,7 @@ import os
 import logging
 from xml.etree.ElementTree import Element, tostring
 from xml.dom import minidom
-
+import xml.etree.ElementTree as ET
 
 
 def xml_tags(content):
@@ -25,17 +25,6 @@ class ParseXml:
     def __init__(self, content):
         self.content = content
 
-    
-    def getTags(self):
-        tagNames = []
-        # tagNames.append(idColumnName)
-        for item in self.content:
-            allTags = item.find_all()
-            for tag in allTags:
-                if tag.name not in tagNames:
-                    tagNames.append(tag.name)
-        return [x.lower() for x in tagNames]
-
     def getItems(self):
         # initialize list
         itemList = []
@@ -50,9 +39,15 @@ class ParseXml:
                 a_tag.decompose()
             allTags = item.find_all()
             for tag in allTags:
-                # make sure to look for all the tags with the name guid
+                """
+                -------------- Add specific tags here and unique operations --------------
+                """
+                # if tag.name =='enclosure':
+                #     print(tag.text)
+
+                # else:
                 editText = tag.text.replace('\n', '')
-                itemDict[tag.name] = editText 
+                itemDict[tag.name] = editText
                 # here we need to look through the text and check if there are any editing tags and styling 
             itemList.append(itemDict)
         return itemList
@@ -86,3 +81,4 @@ class ReadArticles:
         except Exception as e:
             logging.critical("Critical : %s", str(e))
             raise SystemExit(-1)
+        

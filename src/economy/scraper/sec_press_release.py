@@ -12,7 +12,8 @@ def main():
     topic = 'economy'
     link_variable_name = 'link'
     notification_title = 'SEC Updates'
-    item_name = ''
+    item_name = 'item'
+    notify = SendNotification()
 
     resp = Response(table, topic, url, link_variable_name, item_name)
     xml_string, response = resp.get_soup()
@@ -34,7 +35,7 @@ def main():
     for item in data:
         scrapped = ReadArticles().check_item(table, item[link_variable_name])
         if scrapped == False:
-            # item = resp.log_item(item, response)
+            item = resp.log_item(item, response)
             items.append(item)
 
     if len(items) > 0:
@@ -42,11 +43,10 @@ def main():
         print(number_of_items)
         cleaned = clean_items(items)
         print(cleaned)
-        # WriteItems().process_item(cleaned, table, topic)
-        notify = SendNotification(topic)
+        WriteItems().process_item(cleaned, table, topic)
         recent = notify.get_recent_value(cleaned)
         message = notify.message(cleaned, recent['title'])
-        notify.notification_push(notification_title, str(message))
+        notify.notification_push(topic,notification_title, str(message))
         
         logging.info(f'The total items needed are: {number_of_items}')
     else:
