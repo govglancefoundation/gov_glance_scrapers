@@ -13,6 +13,7 @@ def main():
     link_variable_name = 'link'
     notification_title = 'Dept. of Defense Updates'
     item_name = 'item'
+    format = 'xml'
     notify = SendNotification()
 
 
@@ -21,7 +22,7 @@ def main():
     
     for url in urls:
         resp = Response(table, topic, url, link_variable_name, item_name)
-        xml_string, response = resp.get_soup()
+        xml_string, response = resp.get_soup(format)
        
         """
         Edit the XML based on your needs

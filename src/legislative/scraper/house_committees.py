@@ -35,6 +35,7 @@ def main():
     link_variable_name = 'link'
     notification_title = 'House Committee Meetings Updates'
     item_name = 'item'
+    format = 'xml'
     notify = SendNotification()
 
     
@@ -43,7 +44,7 @@ def main():
         print(url)
         data = []
         resp = Response(scraper_name, topic, url, link_variable_name, item_name)
-        xml_string, response = resp.get_soup()
+        xml_string, response = resp.get_soup(format)
         print(response.status_code)
         soup = BeautifulSoup(response.content, features='xml')
         table = soup.find('title').text.replace('U.S. House of Representatives - ','').replace(' ','_').replace("'", '')

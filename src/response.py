@@ -27,11 +27,11 @@ class Response:
                         job_name=f'{topic}_Job',
                         )
         
-    def get_soup(self):
+    def get_soup(self, format):
         
         requests = self.scrapeops_logger.RequestsWrapper()
         response = requests.get(self.link)
-        soup = BeautifulSoup(response.content, features='xml')
+        soup = BeautifulSoup(response.content, features=format)
         xml_string = soup.find_all(self.item_name)
         return xml_string, response
     

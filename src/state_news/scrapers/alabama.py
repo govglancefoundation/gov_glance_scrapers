@@ -9,19 +9,19 @@ load_dotenv()
 
 
 def main():
-    url = "https://www.fda.gov/about-fda/contact-fda/stay-informed/rss-feeds/food-safety-recalls/rss.xml"
-
-    table = 'food_recalls'
-    topic = 'health'
+    url = "https://governor.alabama.gov/newsroom/"
+    table = 'alabama'
+    topic = 'state'
     link_variable_name = 'link'
-    notification_title = 'Food Recalls Updates'
-    item_name = 'item'
-    format = 'xml'
-    notify = SendNotification()
+    notification_title = 'Alabama State Updates'
+    item_name = 'article'
+    format = 'html.parser'
+    # notify = SendNotification()
 
 
     resp = Response(table, topic, url, link_variable_name, item_name)
     xml_string, response = resp.get_soup(format)
+    print(xml_string)
     data = []
 
 
@@ -43,26 +43,26 @@ def main():
         data.append(entry_data)
 
 
-
+    print(data)
     items = []
-    for item in data:
-        scrapped = ReadArticles().check_item(table, item[link_variable_name])
-        if scrapped == False:
-            item = resp.log_item(item, response)
-            items.append(item)
+    # for item in data:
+    #     scrapped = ReadArticles().check_item(table, item[link_variable_name])
+    #     if scrapped == False:
+    #         item = resp.log_item(item, response)
+    #         items.append(item)
 
     
     if len(items) > 0:
         number_of_items = len(items)
-        print(number_of_items)
-        cleaned = clean_items(items)
-        print(cleaned)
-        WriteItems().process_item(cleaned, table, topic)
-        recent = notify.get_recent_value(cleaned)
-        message = notify.message(cleaned, recent['title'])
-        notify.notification_push(topic,notification_title, str(message))
+    #     print(number_of_items)
+    #     cleaned = clean_items(items)
+    #     print(cleaned)
+        # WriteItems().process_item(cleaned, table, topic)
+        # recent = notify.get_recent_value(cleaned)
+        # message = notify.message(cleaned, recent['title'])
+        # notify.notification_push(topic,notification_title, str(message))
         
-        logging.info(f'The total items needed are: {number_of_items}')
+        logging.info(f'The total items needed for {table.title()} are: {number_of_items}')
     else:
         logging.info(f'No new items found for {table.title()}')
 

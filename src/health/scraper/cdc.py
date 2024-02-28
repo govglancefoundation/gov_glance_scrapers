@@ -19,7 +19,7 @@ def main():
 
 
     resp = Response(table, topic, url, link_variable_name, item_name)
-    xml_string, response = resp.get_soup()
+    xml_string, response = resp.get_soup(format)
     data = []
 
 

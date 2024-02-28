@@ -14,6 +14,7 @@
 #     link_variable_name = 'link'
 #     notification_title = 'National Guard News'
 #     item_name = 'item'
+    # format = 'xml'
     # notify = SendNotification()
     
 #     # resp = Response(table, topic, url, link_variable_name, item_name)

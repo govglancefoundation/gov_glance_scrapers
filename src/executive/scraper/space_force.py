@@ -13,10 +13,11 @@ def main():
     link_variable_name = 'link'
     notification_title = 'United States Space Force News'
     item_name = 'item'
+    format = 'xml'
     notify = SendNotification()
     
     resp = Response(table, topic, url, link_variable_name, item_name)
-    xml_string, response = resp.get_soup()
+    xml_string, response = resp.get_soup(format)
 
     data = []
 
