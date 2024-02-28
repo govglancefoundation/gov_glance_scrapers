@@ -32,5 +32,5 @@ class SendNotification:
                 title=notifcation_title, body=body),
             topic=topic,
         )
-        print(message)
-        # messaging.send(message)
+        # print(message)
+        messaging.send(message)
