@@ -26,7 +26,12 @@ class Response:
                         spider_name=f'{title}_Scraper',
                         job_name=f'{topic}_Job',
                         )
-        
+    
+    def request_content(self, proxies=None):  
+        requests = self.scrapeops_logger.RequestsWrapper()
+        response = requests.get(self.link, proxies=proxies)
+        return response
+    
     def get_soup(self, format):
         
         requests = self.scrapeops_logger.RequestsWrapper()

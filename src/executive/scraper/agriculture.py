@@ -8,13 +8,13 @@ import xml.etree.ElementTree as ET
 
 def main():
     url = "https://www.usda.gov/rss/home.xml"
-    table = 'agriculture'
+    table = 'environment'
     topic = 'executive'
     link_variable_name = 'link'
     notification_title = 'USDA Updates'
     item_name = 'item'
     format = 'xml'
-    notify = SendNotification()
+    #notify = SendNotification()
 
 
     resp = Response(table, topic, url, link_variable_name, item_name)
@@ -51,10 +51,10 @@ def main():
         print(number_of_items)
         cleaned = clean_items(items)
         print(cleaned)
-        WriteItems().process_item(cleaned, table, topic)
-        recent = notify.get_recent_value(cleaned)
-        message = notify.message(cleaned, recent['title'])
-        notify.notification_push(topic,notification_title, str(message))
+        WriteItems().process_item(cleaned, table, 'excutive')
+        # recent = notify.get_recent_value(cleaned)
+        # message = notify.message(cleaned, recent['title'])
+        # notify.notification_push(topic,notification_title, str(message))
         
         logging.info(f'The total items needed are: {number_of_items}')
     else:

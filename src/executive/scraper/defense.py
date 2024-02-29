@@ -9,12 +9,12 @@ import xml.etree.ElementTree as ET
 def main():
     urls = ["https://www.defense.gov/DesktopModules/ArticleCS/RSS.ashx?max=10&ContentType=1&Site=945", 'https://www.defense.gov/DesktopModules/ArticleCS/RSS.ashx?ContentType=9&Site=945&max=10', 'https://www.defense.gov/DesktopModules/ArticleCS/RSS.ashx?ContentType=13&Site=945&max=10']
     table = 'defense'
-    topic = 'executive'
+    topic = 'defense'
     link_variable_name = 'link'
     notification_title = 'Dept. of Defense Updates'
     item_name = 'item'
     format = 'xml'
-    notify = SendNotification()
+    #notify = SendNotification()
 
 
     data = []
@@ -52,10 +52,10 @@ def main():
         print(number_of_items)
         cleaned = clean_items(items)
         print(cleaned)
-        WriteItems().process_item(cleaned, table, topic)
-        recent = notify.get_recent_value(cleaned)
-        message = notify.message(cleaned, recent['title'])
-        notify.notification_push(topic,notification_title, str(message))
+        WriteItems().process_item(cleaned, table, 'executive')
+        # recent = notify.get_recent_value(cleaned)
+        # message = notify.message(cleaned, recent['title'])
+        # notify.notification_push(topic,notification_title, str(message))
         
         logging.info(f'The total items needed are: {number_of_items}')
     else:

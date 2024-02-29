@@ -9,12 +9,12 @@ import xml.etree.ElementTree as ET
 def main():
     url = "https://docs.house.gov/Committee/RSS.ashx?Code=IG00"
     table = 'permanent_select_committee_on_intelligence'
-    topic = 'executive'
+    topic = 'foreignAffairs'
     link_variable_name = 'link'
     notification_title = 'Committee on Intelligence Updates'
     item_name = 'item'
     format = 'xml'
-    notify = SendNotification()
+    #notify = SendNotification()
     
     resp = Response(table, topic, url, link_variable_name, item_name)
     xml_string, response = resp.get_soup(format)
@@ -49,9 +49,9 @@ def main():
         cleaned = clean_items(items)
         print(cleaned)
         WriteItems().process_item(cleaned, table, topic)
-        recent = notify.get_recent_value(cleaned)
-        message = notify.message(cleaned, recent['title'])
-        notify.notification_push(topic,notification_title, str(message))
+        # recent = notify.get_recent_value(cleaned)
+        # message = notify.message(cleaned, recent['title'])
+        # notify.notification_push(topic,notification_title, str(message))
         
         logging.info(f'The total items needed are: {number_of_items}')
     else:
