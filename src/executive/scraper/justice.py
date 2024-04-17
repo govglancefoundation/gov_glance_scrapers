@@ -7,7 +7,7 @@ import xml.etree.ElementTree as ET
 
 
 def main():
-    url = "https://www.justice.gov/feeds/opa/justice-news.xml"
+    url = "https://www.justice.gov/news/rss?type=press_release&amp;m=1"
     table = 'justice'
     topic = 'executive'
     link_variable_name = 'link'
