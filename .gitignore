@@ -163,3 +163,5 @@ govglance_scrapers-env
 
 src/log/
 src/firebase2/
+
+test.py
