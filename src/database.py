@@ -18,10 +18,12 @@ class ReadArticles:
     
     def check_item(self,name, url): # the name variable is something that you write in the code block
         try:
-            table = name.lower()
+            
+            table = name.lower().replace(' ', '_')
             self.cur.execute(f"""SELECT url FROM {self.schema}.{table} WHERE url = '{url}'""")
             results = [i[0] for i in self.cur.fetchall()]
             if results:
+                print(url +'exists!')
                 return True
             else:
                 return False
@@ -52,6 +54,8 @@ class WriteItems:
             try:
                 schema = self.schema
                 table_name = table.lower().replace(' ', '_')
+
+                print(table_name)
                 '''if table does not exist, create it'''
                 columns = []
 
@@ -78,6 +82,8 @@ class WriteItems:
                 These appends are gor the columns that every table will need like id, topic, and collected_at
                 '''
                 columns.append(f"""topic character varying COLLATE pg_catalog."default" DEFAULT '{topic}'::character varying""")
+                columns.append(f"""collection_name character varying COLLATE pg_catalog."default" DEFAULT '{table}'::character varying""")
+
                 columns.append(f"""CONSTRAINT {table_name}_pkey PRIMARY KEY (id)""")
                 columns.append("collected_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP")
 
@@ -90,9 +96,9 @@ class WriteItems:
                
                 columns = ', '.join(item.keys())
                 values = ', '.join('%({})s'.format(key) for key in item.keys())
-
+                print(item)
                 query = f"INSERT INTO {schema}.{table_name} ({columns}) VALUES ({values})"
-                
+                print(f"Item inserted to {schema}.{table_name}")
                 self.cur.execute(query, item)
                 self.connection.commit()
                 logging.info(f"Value inserted {query}")

@@ -27,15 +27,15 @@ class Response:
                         job_name=f'{topic}_Job',
                         )
     
-    def request_content(self, proxies=None):  
+    def request_content(self, proxies=None, headers=None):  
         requests = self.scrapeops_logger.RequestsWrapper()
-        response = requests.get(self.link, proxies=proxies)
+        response = requests.get(self.link, proxies=proxies, headers=headers)
         return response
     
-    def get_soup(self, format):
+    def get_soup(self, format, proxies=None, headers=None):
         
         requests = self.scrapeops_logger.RequestsWrapper()
-        response = requests.get(self.link)
+        response = requests.get(self.link, proxies=proxies, headers=headers)
         soup = BeautifulSoup(response.content, features=format)
         xml_string = soup.find_all(self.item_name)
         return xml_string, response
