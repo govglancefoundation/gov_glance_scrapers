@@ -34,6 +34,8 @@ def main():
         for tag in tags:
             if tag.name == 'enclosure':
                 entry_data['enclosure'] = item.find('enclosure')['url']
+            if tag.name == 'creator':
+                entry_data['collection_name'] = item.find('creator').text
             else:
                 text = tag.text.replace('\n', '')
                 entry_data[tag.name] = text
