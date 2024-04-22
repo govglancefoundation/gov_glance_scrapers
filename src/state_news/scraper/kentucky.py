@@ -28,10 +28,11 @@ def main():
     notify = SendNotification()
     proxy = Proxy().get_proxy()
     proxies = {"http": proxy, "https": proxy}
+    headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36'}
 
     resp = Response(table, topic, url, link_variable_name, item_name)
 
-    response = resp.request_content(proxies=proxies)
+    response = resp.request_content(proxies=proxies, headers=headers)
     xml_string = convert_strin_todict(response.text)['Results']
     data = []
 

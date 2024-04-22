@@ -42,7 +42,6 @@ class Response:
     
     def log_item(self, item, response):
         logging.info(f'New item found{item}')
-        print(item['link'])
         self.scrapeops_logger.item_scraped(
                 response=response,
                 item=item,

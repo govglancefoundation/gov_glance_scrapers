@@ -9,13 +9,13 @@ load_dotenv()
 
 
 def main():
-    url = "https://governor.alabama.gov/newsroom/"
-    table = 'alabama'
-    topic = 'state'
-    link_variable_name = 'link'
-    notification_title = 'Alabama State Updates'
-    item_name = 'article'
-    format = 'html.parser'
+    url = "https://governor.alabama.gov/feed/"      # url
+    table = 'alabama'                               # State name
+    topic = 'state'                                 # The topic of the scraper
+    link_variable_name = 'link'                     # Whatever the link variable name might be
+    notification_title = 'Alabama State Updates'    # Notification title
+    item_name = 'item'                              # Make sure that you using the right item tag name
+    format = 'xml'
     # notify = SendNotification()
 
 
@@ -30,7 +30,7 @@ def main():
     Edit the XML based on your needs
     """
     for item in xml_string: 
-        print(item)
+        # print(item)
         entry_data = {}
         # Make sure to look for all the tags in content
         tags = item.find_all()
@@ -43,21 +43,22 @@ def main():
         data.append(entry_data)
 
 
-    print(data)
+    # print(data)
+
     items = []
-    # for item in data:
-    #     scrapped = ReadArticles().check_item(table, item[link_variable_name])
-    #     if scrapped == False:
-    #         item = resp.log_item(item, response)
-    #         items.append(item)
+    for item in data[:1]:
+        scrapped = ReadArticles().check_item(table, item[link_variable_name])
+        if scrapped == False:
+            item = resp.log_item(item, response)
+            items.append(item)
 
     
     if len(items) > 0:
         number_of_items = len(items)
-    #     print(number_of_items)
-    #     cleaned = clean_items(items)
-    #     print(cleaned)
-        # WriteItems().process_item(cleaned, table, topic)
+        print(number_of_items)
+        cleaned = clean_items(items)
+        print(cleaned)
+        WriteItems().process_item(cleaned, table, topic)
         # recent = notify.get_recent_value(cleaned)
         # message = notify.message(cleaned, recent['title'])
         # notify.notification_push(topic,notification_title, str(message))
