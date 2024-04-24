@@ -32,6 +32,11 @@ class Response:
         response = requests.get(self.link, proxies=proxies, headers=headers)
         return response
     
+    def request_content_post(self, proxies=None, headers=None, data=None):
+        requests = self.scrapeops_logger.RequestsWrapper()
+        response = requests.post(self.link, proxies=proxies, headers=headers, json=data)
+        return response
+    
     def get_soup(self, format, proxies=None, headers=None):
         
         requests = self.scrapeops_logger.RequestsWrapper()
