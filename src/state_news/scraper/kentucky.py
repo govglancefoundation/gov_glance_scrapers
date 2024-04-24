@@ -6,6 +6,7 @@ import logging
 import xml.etree.ElementTree as ET
 from dotenv import load_dotenv
 import json
+import re
 load_dotenv()
 
 
@@ -26,32 +27,32 @@ def main():
     item_name = None
     format = 'html.parser'
     notify = SendNotification()
-    proxy = Proxy().get_proxy()
-    proxies = {"http": proxy, "https": proxy}
     headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36'}
 
     resp = Response(table, topic, url, link_variable_name, item_name)
-
-    response = resp.request_content(proxies=proxies, headers=headers)
-    xml_string = convert_strin_todict(response.text)['Results']
+    response = resp.request_content(headers=headers)
+    # print(xml_string)
+    json_string = re.search(r'\{.*\}', response.text, re.DOTALL).group()
+    payload = json.loads(json_string)
+    # print(payload['Results'])
     data = []
 
-    """
-    Edit the XML based on your needs
-    """
-    for item in xml_string[:1]: 
-        item = (item['Items'])[0]
-        print(item)
-        entry_data = {}
-        # Make sure to look for all the tags in content
-        entry_data['link'] = (item['LinkUrl'])
-        entry_data['title'] = (item['Title'])
-        entry_data['pubDate'] = item['DisplayDateContent']
-        entry_data['description'] = item['Summary']
-        data.append(entry_data)
+    # """
+    # Edit the XML based on your needs
+    # """
+
+    ### 5 things were printed out
+    for obj in payload['Results']: 
+        for item in obj['Items']:
+            entry_data = {}
+            # Make sure to look for all the tags in content
+            entry_data['link'] = (item['LinkUrl'])
+            entry_data['title'] = (item['Title'])
+            entry_data['pubDate'] = item['DisplayDateContent']
+            entry_data['description'] = item['Summary']
+            data.append(entry_data)
 
 
-    print(data)
     items = []
     for item in data:
         scrapped = ReadArticles().check_item(table, item[link_variable_name])
@@ -66,13 +67,13 @@ def main():
         cleaned = clean_items(items)
         print(cleaned)
         WriteItems().process_item(cleaned, table, topic)
-        recent = notify.get_recent_value(cleaned)
-        message = notify.message(cleaned, recent['title'])
-        notify.notification_push(topic,notification_title, str(message))
+        # recent = notify.get_recent_value(cleaned)
+        # message = notify.message(cleaned, recent['title'])
+        # notify.notification_push(topic,notification_title, str(message))
         
-        logging.info(f'The total items needed for {table.title()} are: {number_of_items}')
-    else:
-        logging.info(f'No new items found for {table.title()}')
+    #     logging.info(f'The total items needed for {table.title()} are: {number_of_items}')
+    # else:
+    #     logging.info(f'No new items found for {table.title()}')
 
 
 
