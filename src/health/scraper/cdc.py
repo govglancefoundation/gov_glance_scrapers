@@ -36,7 +36,7 @@ def main():
             if child.tag == 'link':
                 entry_data['link'] = child.attrib['href']
             elif child.tag == 'category':
-                entry_data['category'] = child.attrib['term']
+                entry_data['collectionName'] = child.attrib['term']
             elif child.tag == 'summary':
                 entry_data['description'] = child.text.strip()
             elif child.tag  == 'updated':
