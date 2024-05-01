@@ -2,6 +2,7 @@ import logging
 from bs4 import BeautifulSoup
 from scrapeops_python_requests.scrapeops_requests import ScrapeOpsRequests
 import os
+import json
 from dotenv import load_dotenv
 load_dotenv()
 
@@ -37,6 +38,10 @@ class Response:
         response = requests.post(self.link, proxies=proxies, headers=headers, json=data)
         return response
     
+    def request_content_json(self, proxies=None, headers=None):
+        requests = self.scrapeops_logger.RequestsWrapper()
+        response = requests.get(self.link, proxies=proxies, headers=headers)
+        return json.loads(response.content), response
     def get_soup(self, format, proxies=None, headers=None):
         
         requests = self.scrapeops_logger.RequestsWrapper()
