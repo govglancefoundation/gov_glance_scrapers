@@ -26,7 +26,7 @@ def main():
     """
     Edit the XML based on your needs
     """
-    for item in xml_string: 
+    for item in xml_string[:1]: 
         print(item)
         entry_data = {}
         # Make sure to look for all the tags in content
@@ -35,7 +35,7 @@ def main():
             if tag.name == 'enclosure':
                 entry_data['enclosure'] = item.find('enclosure')['url']
             if tag.name == 'creator':
-                entry_data['collection_name'] = item.find('creator').text
+                entry_data['creator'] = item.find('creator').text
             else:
                 text = tag.text.replace('\n', '')
                 entry_data[tag.name] = text
@@ -53,7 +53,7 @@ def main():
         print(number_of_items)
         cleaned = clean_items(items)
         print(cleaned)
-        WriteItems().process_item(cleaned, table, 'excutive')
+        # WriteItems().process_item(cleaned, table, 'excutive')
         # recent = notify.get_recent_value(cleaned)
         # message = notify.message(cleaned, recent['title'])
         # notify.notification_push(topic,notification_title, str(message))

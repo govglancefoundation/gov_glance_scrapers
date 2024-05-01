@@ -25,12 +25,17 @@ def main():
     """
     Edit the XML based on your needs
     """
-    for item in xml_string: 
-        entry_data = {}
-        root = ET.fromstring(str(item))
-        for child in root:
-            entry_data[child.tag] = child.text.strip() if child.text else ''
-        data.append(entry_data)
+    for item in xml_string:
+            entry_data = {}
+            # Make sure to look for all the tags in content
+            tags = item.find_all()
+            for tag in tags:
+                if tag.name == 'enclosure':
+                    entry_data['enclosure'] = item.find('enclosure')['url']
+                else:
+                    text = tag.text.replace('\n', '')
+                    entry_data[tag.name] = text
+            data.append(entry_data)
 
     items = []
     for item in data:
@@ -45,9 +50,9 @@ def main():
         cleaned = clean_items(items)
         print(cleaned)
         WriteItems().process_item(cleaned, table, topic)
-        recent = notify.get_recent_value(cleaned)
-        message = notify.message(cleaned, recent['title'])
-        notify.notification_push(topic,notification_title, str(message))
+        # recent = notify.get_recent_value(cleaned)
+        # message = notify.message(cleaned, recent['title'])
+        # notify.notification_push(topic,notification_title, str(message))
         
         logging.info(f'The total items needed are: {number_of_items}')
     else:
