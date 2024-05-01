@@ -15,7 +15,7 @@ def main():
     link_variable_name = 'link'                     # Whatever the link variable name might be
     notification_title = 'Arkansas State Updates'    # Notification title
     item_name = 'item'                              # Make sure that you using the right item tag name
-    format = 'xml'
+    format = 'json'
     # notify = SendNotification()
 
 

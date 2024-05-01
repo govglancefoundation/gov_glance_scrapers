@@ -9,18 +9,19 @@ load_dotenv()
 
 
 def main():
-    url = "https://governor.alabama.gov/feed/"      # url
-    table = 'alabama'                               # State name
+    url = 'https://www.gov.ca.gov/feed/'     # url
+    table = 'california'                               # State name
     topic = 'state'                                 # The topic of the scraper
     link_variable_name = 'link'                     # Whatever the link variable name might be
-    notification_title = 'Alabama State Updates'    # Notification title
+    notification_title = 'California State Updates'    # Notification title
     item_name = 'item'                              # Make sure that you using the right item tag name
     format = 'xml'
+    headers = {'User-Agent': "Mozilla/5.0 (iPhone; CPU iPhone OS 13_5_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.1.1 Mobile/15E148 Safari/604.1"}
     # notify = SendNotification()
 
 
     resp = Response(table, topic, url, link_variable_name, item_name)
-    xml_string, response = resp.get_soup(format)
+    xml_string, response = resp.get_soup(format, headers=headers)
     print(xml_string)
     data = []
 
@@ -71,3 +72,5 @@ def main():
 
 if __name__ == '__main__':
     main()
+
+
