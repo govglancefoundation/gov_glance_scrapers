@@ -86,7 +86,7 @@ class WriteItems:
 
                 columns.append(f"""CONSTRAINT {table_name}_pkey PRIMARY KEY (id)""")
                 columns.append("collected_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP")
-
+                columns.append("ts tsvector GENERATED ALWAYS AS (to_tsvector('english'::regconfig, title)) STORED")
 
                # Constructing the full query
                 query = f"CREATE TABLE IF NOT EXISTS {schema}.{table_name} ({', '.join(columns)})"
