@@ -163,5 +163,6 @@ govglance_scrapers-env
 
 src/log/
 firebase2/
-./firebase2/
+*/firebase2/
 test.py
+../../.DS_Store
