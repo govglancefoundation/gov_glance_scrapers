@@ -1,0 +1,32 @@
+[
+    {
+        "id": "8148", 
+        "name": "Louisiana Municipal General Election", 
+        "electionDay": "2024-04-27", 
+        "ocdDivisionId": "ocd-division/country:us/state:la"
+    },
+    {
+        "id": "8153", 
+        "name": "Indiana Primary Election", 
+        "electionDay": "2024-05-07", 
+        "ocdDivisionId": "ocd-division/country:us/state:in"
+    },
+    {
+        "id": "8155", 
+        "name": "Delaware School Board Election", 
+        "electionDay": "2024-05-14", 
+        "ocdDivisionId": "ocd-division/country:us/state:de"
+    },
+    {
+        "id": "8161", 
+        "name": "Rhode Island Special Referendum Election", 
+        "electionDay": "2024-05-07", 
+        "ocdDivisionId": "ocd-division/country:us/state:ri"
+    },
+    {
+        "id": "8162", 
+        "name": "Michigan Consolidated Election", 
+        "electionDay": "2024-05-07", 
+        "ocdDivisionId": "ocd-division/country:us/state:mi"
+    }
+]
