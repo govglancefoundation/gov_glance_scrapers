@@ -11,6 +11,7 @@ load_dotenv()
 # def main():
 #     url = "https://www.federalregister.gov/api/v1/documents.rss?conditions%5Bcorrection%5D=0&conditions%5Bpresident%5D=&conditions%5Bpresidential_document_type%5D=executive_order&conditions%5Bsigning_date%5D%5Byear%5D=&conditions%5Btype%5D%5B%5D=PRESDOCU"
 #     table = 'executive_orders'
+    # schema = 'united_states_of_america'
 #     topic = 'executive'
 #     link_variable_name = 'link'
 #     notification_title = 'White House Updates'
@@ -22,7 +23,7 @@ load_dotenv()
 #         number_of_items = len(items)
 #         cleaned = clean_items(items)
 #         print(cleaned)
-#         WriteItems().process_item(cleaned, table, topic)
+#         WriteItems(schema=schema).process_item(cleaned, table, topic)
 #         notify = SendNotification(topic)
 #         recent = notify.get_recent_value(cleaned)
 #         message = notify.message(cleaned, recent['title'])
@@ -40,64 +41,64 @@ load_dotenv()
 
 
 
-def main():
-    url = "https://www.nasa.gov/rss/dyn/breaking_news.rss"
-    table = 'nasa'
-    topic = 'science_and_tech'
-    link_variable_name = 'link'
-    notification_title = 'Medical Safety Alerts'
-    item_name = 'item'
-    format = 'xml'
-    notify = SendNotification()
+# def main():
+#     url = "https://www.nasa.gov/rss/dyn/breaking_news.rss"
+#     table = 'nasa'
+#     topic = 'science_and_tech'
+#     link_variable_name = 'link'
+#     notification_title = 'Medical Safety Alerts'
+#     item_name = 'item'
+#     format = 'xml'
+#     notify = SendNotification()
 
 
-    resp = Response(table, topic, url, link_variable_name, item_name)
-    xml_string, response = resp.get_soup(format)
-    data = []
-
-
-
-    """
-    Edit the XML based on your needs
-    """
-    for item in xml_string: 
-        print(item)
-        entry_data = {}
-        # Make sure to look for all the tags in content
-        tags = item.find_all()
-        for tag in tags:
-            if tag.name == 'enclosure':
-                entry_data['enclosure'] = item.find('enclosure')['url']
-            else:
-                text = tag.text.replace('\n', '')
-                entry_data[tag.name] = text
-        data.append(entry_data)
+#     resp = Response(table, topic, url, link_variable_name, item_name)
+#     xml_string, response = resp.get_soup(format)
+#     data = []
 
 
 
-    items = []
-    for item in data:
-        scrapped = ReadArticles().check_item(table, item[link_variable_name])
-        if scrapped == False:
-            item = resp.log_item(item, response)
-            items.append(item)
+#     """
+#     Edit the XML based on your needs
+#     """
+#     for item in xml_string: 
+#         print(item)
+#         entry_data = {}
+#         # Make sure to look for all the tags in content
+#         tags = item.find_all()
+#         for tag in tags:
+#             if tag.name == 'enclosure':
+#                 entry_data['enclosure'] = item.find('enclosure')['url']
+#             else:
+#                 text = tag.text.replace('\n', '')
+#                 entry_data[tag.name] = text
+#         data.append(entry_data)
+
+
+
+#     items = []
+#     for item in data:
+#         scrapped = ReadArticles(schema=schema).check_item(table, item[link_variable_name])
+#         if scrapped == False:
+#             item = resp.log_item(item, response)
+#             items.append(item)
 
     
-    if len(items) > 0:
-        number_of_items = len(items)
-        print(number_of_items)
-        cleaned = clean_items(items)
-        print(cleaned)
-        WriteItems().process_item(cleaned, table, topic)
-        recent = notify.get_recent_value(cleaned)
-        message = notify.message(cleaned, recent['title'])
-        notify.notification_push(topic,notification_title, str(message))
+#     if len(items) > 0:
+#         number_of_items = len(items)
+#         print(number_of_items)
+#         cleaned = clean_items(items)
+#         print(cleaned)
+#         WriteItems(schema=schema).process_item(cleaned, table, topic)
+#         recent = notify.get_recent_value(cleaned)
+#         message = notify.message(cleaned, recent['title'])
+#         notify.notification_push(topic,notification_title, str(message))
         
-        logging.info(f'The total items needed for {table.title()} are: {number_of_items}')
-    else:
-        logging.info(f'No new items found for {table.title()}')
+#         logging.info(f'The total items needed for {table.title()} are: {number_of_items}')
+#     else:
+#         logging.info(f'No new items found for {table.title()}')
 
 
 
-if __name__ == '__main__':
-    main()
+# if __name__ == '__main__':
+#     main()

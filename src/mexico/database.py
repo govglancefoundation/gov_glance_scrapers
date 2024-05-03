@@ -5,14 +5,14 @@ from psycopg2 import errors
 
 class ReadArticles:
 
-    def __init__(self):
+    def __init__(self, schema):
             
         POSTGRES_USERNAME = os.environ.get('POSTGRES_USERNAME')
         POSTGRES_PASS = os.environ.get('POSTGRES_PASS')
         POSTGRES_ADDRESS = os.environ.get('POSTGRES_ADDRESS')
         POSTGRES_PORT = os.environ.get('POSTGRES_PORT')
         POSTGRES_DBNAME = os.environ.get('POSTGRES_DBNAME')
-        self.schema = "united_states_of_america"
+        self.schema = schema
         self.connection = psycopg2.connect(host=POSTGRES_ADDRESS, user=POSTGRES_USERNAME, password=POSTGRES_PASS, dbname=POSTGRES_DBNAME, port=POSTGRES_PORT)
         self.cur = self.connection.cursor()
     
@@ -44,7 +44,7 @@ class WriteItems:
         POSTGRES_ADDRESS = os.environ.get('POSTGRES_ADDRESS')
         POSTGRES_PORT = os.environ.get('POSTGRES_PORT')
         POSTGRES_DBNAME = os.environ.get('POSTGRES_DBNAME')
-        self.schema = "united_states_of_america"
+        self.schema = "mexico"
         self.connection = psycopg2.connect(host=POSTGRES_ADDRESS, user=POSTGRES_USERNAME, password=POSTGRES_PASS, dbname=POSTGRES_DBNAME, port=POSTGRES_PORT)
         self.cur = self.connection.cursor()
 

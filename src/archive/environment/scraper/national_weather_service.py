@@ -10,6 +10,7 @@ import xml.etree.ElementTree as ET
 def main():
     url = "https://www.weather.gov/rss_page.php?site_name=nws"
     table = 'national_weather_service_update'
+    schema = 'united_states_of_america'
     topic = 'environment'
     link_variable_name = 'link'
     notification_title = 'National Weather Service Updates'
@@ -35,7 +36,7 @@ def main():
 
     items = []
     for item in data:
-        scrapped = ReadArticles().check_item(table, item[link_variable_name])
+        scrapped = ReadArticles(schema=schema).check_item(table, item[link_variable_name])
         if scrapped == False:
             item = resp.log_item(item, response)
             items.append(item)
@@ -45,7 +46,7 @@ def main():
         print(number_of_items)
         cleaned = clean_items(items)
         print(cleaned)
-        WriteItems().process_item(cleaned, table, topic)
+        WriteItems(schema=schema).process_item(cleaned, table, topic)
         recent = notify.get_recent_value(cleaned)
         message = notify.message(cleaned, recent['title'])
         notify.notification_push(topic,notification_title, str(message))

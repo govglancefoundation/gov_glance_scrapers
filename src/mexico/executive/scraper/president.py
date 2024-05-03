@@ -11,16 +11,18 @@ load_dotenv()
 def main():
     url = "https://presidente.gob.mx/feed/"      # url
     table = 'presidente'                               # State name
+    schema = 'mexico'
     topic = 'Ejecutivo'                                 # The topic of the scraper
     link_variable_name = 'link'                     # Whatever the link variable name might be
     notification_title = 'Noticias Presidenciales'    # Notification title
     item_name = 'item'                              # Make sure that you using the right item tag name
     format = 'xml'
+    headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36'}
     # notify = SendNotification()
 
 
     resp = Response(table, topic, url, link_variable_name, item_name)
-    xml_string, response = resp.get_soup(format)
+    xml_string, response = resp.get_soup(format, headers=headers)
     print(xml_string)
     data = []
 
@@ -29,7 +31,7 @@ def main():
     """
     Edit the XML based on your needs
     """
-    for item in xml_string: 
+    for item in xml_string[:1]: 
         # print(item)
         entry_data = {}
         # Make sure to look for all the tags in content
@@ -47,7 +49,7 @@ def main():
 
     items = []
     for item in data:
-        scrapped = ReadArticles().check_item(table, item[link_variable_name])
+        scrapped = ReadArticles(schema=schema).check_item(table, item[link_variable_name])
         if scrapped == False:
             item = resp.log_item(item, response)
             items.append(item)
@@ -58,7 +60,7 @@ def main():
         print(number_of_items)
         cleaned = clean_items(items)
         print(cleaned)
-        # WriteItems().process_item(cleaned, table, topic)
+        WriteItems(schema=schema).process_item(cleaned, table, topic)
         # recent = notify.get_recent_value(cleaned)
         # message = notify.message(cleaned, recent['title'])
         # notify.notification_push(topic,notification_title, str(message))

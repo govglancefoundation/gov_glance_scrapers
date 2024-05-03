@@ -9,6 +9,7 @@ import xml.etree.ElementTree as ET
 def main():
     urls = ["https://www.defense.gov/DesktopModules/ArticleCS/RSS.ashx?max=10&ContentType=1&Site=945", 'https://www.defense.gov/DesktopModules/ArticleCS/RSS.ashx?ContentType=9&Site=945&max=10', 'https://www.defense.gov/DesktopModules/ArticleCS/RSS.ashx?ContentType=13&Site=945&max=10']
     table = 'defense'
+    schema = 'united_states_of_america'
     topic = 'defense'
     link_variable_name = 'link'
     notification_title = 'Dept. of Defense Updates'
@@ -42,7 +43,7 @@ def main():
 
     items = []
     for item in data:
-        scrapped = ReadArticles().check_item(table, item[link_variable_name])
+        scrapped = ReadArticles(schema=schema).check_item(table, item[link_variable_name])
         if scrapped == False:
             item = resp.log_item(item, response)
             items.append(item)
@@ -52,7 +53,7 @@ def main():
         print(number_of_items)
         cleaned = clean_items(items)
         print(cleaned)
-        WriteItems().process_item(cleaned, table, 'executive')
+        WriteItems(schema=schema).process_item(cleaned, table, 'executive')
         # recent = notify.get_recent_value(cleaned)
         # message = notify.message(cleaned, recent['title'])
         # notify.notification_push(topic,notification_title, str(message))
