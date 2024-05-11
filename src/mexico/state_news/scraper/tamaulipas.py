@@ -9,17 +9,16 @@ load_dotenv()
 
 
 def main():
-    url = "https://presidente.gob.mx/feed/"      # url
-    table = 'presidente'                               # State name
-    schema = 'mexico'
-    topic = 'Ejecutivo'                                 # The topic of the scraper
-    branch = 'Ejecutivo'                              # The branch of the government
+    url = 'http://www.tamaulipas.gob.mx/feed/'        # url
+    table = 'Tamaulipas'   
+    schema = 'mexico'                               # State name
+    topic = 'State News'                            # The topic of the scraper
     link_variable_name = 'link'                     # Whatever the link variable name might be
-    notification_title = 'Noticias Presidenciales'    # Notification title
+    notification_title = 'Tamaulipas'                  # Notification title
     item_name = 'item'                              # Make sure that you using the right item tag name
     format = 'xml'
-    headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36'}
     # notify = SendNotification()
+    headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36'}
 
 
     resp = Response(table, topic, url, link_variable_name, item_name)
@@ -36,7 +35,6 @@ def main():
         # print(item)
         entry_data = {}
         # Make sure to look for all the tags in content
-        
         tags = item.find_all()
         for tag in tags:
             if tag.name == 'enclosure':
@@ -44,7 +42,6 @@ def main():
             else:
                 text = tag.text.replace('\n', '')
                 entry_data[tag.name] = text
-        entry_data['branch'] = branch
         data.append(entry_data)
 
 

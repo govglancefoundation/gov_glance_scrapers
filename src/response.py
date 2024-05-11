@@ -28,24 +28,24 @@ class Response:
                         job_name=f'{topic}_Job',
                         )
     
-    def request_content(self, proxies=None, headers=None):  
+    def request_content(self, proxies=None, headers=None, verify=None):  
         requests = self.scrapeops_logger.RequestsWrapper()
-        response = requests.get(self.link, proxies=proxies, headers=headers)
+        response = requests.get(self.link, proxies=proxies, headers=headers, verify=verify)
         return response
     
-    def request_content_post(self, proxies=None, headers=None, data=None):
+    def request_content_post(self, proxies=None, headers=None, data=None, verify=None):
         requests = self.scrapeops_logger.RequestsWrapper()
-        response = requests.post(self.link, proxies=proxies, headers=headers, json=data)
+        response = requests.post(self.link, proxies=proxies, headers=headers, json=data, verify=verify)
         return response
     
-    def request_content_json(self, proxies=None, headers=None):
+    def request_content_json(self, proxies=None, headers=None, verify=None):
         requests = self.scrapeops_logger.RequestsWrapper()
-        response = requests.get(self.link, proxies=proxies, headers=headers)
-        return json.loads(response.content), response
-    def get_soup(self, format, proxies=None, headers=None):
-        
+        response = requests.get(self.link, proxies=proxies, headers=headers, verify=verify)
+        return json.loads(response.content)[self.item_name], response
+    
+    def get_soup(self, format, proxies=None, headers=None,verify=None):
         requests = self.scrapeops_logger.RequestsWrapper()
-        response = requests.get(self.link, proxies=proxies, headers=headers)
+        response = requests.get(self.link, proxies=proxies, headers=headers, verify=verify)
         soup = BeautifulSoup(response.content, features=format)
         xml_string = soup.find_all(self.item_name)
         return xml_string, response
@@ -66,4 +66,8 @@ class Proxy:
 
     def get_proxy(self):
         proxy = f"http://{self.username}:{self.passwrd}@gate.smartproxy.com:7000"
+        return proxy
+    
+    def get_mexico_proxy(self):
+        proxy = f"https://{self.username}:{self.passwrd}@mx.smartproxy.com:20001"
         return proxy

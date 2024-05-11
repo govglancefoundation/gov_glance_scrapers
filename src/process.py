@@ -44,8 +44,10 @@ def clean_description(description):
     if match:
         cleaned_description =match.group(1)
     # Remove leading and trailing whitespaces
-    cleaned_description = cleaned_description.strip()
-    return cleaned_description
+    cleaned_description = cleaned_description.rstrip().lstrip()
+    pattern = re.compile(r'[\x00-\x1F\x7F-\x9F]|\u2060')
+    cleaned_text = pattern.sub('', cleaned_description).replace("●", "-").replace('• ', "")
+    return cleaned_text
 
 
 class CleanUpProcess:
@@ -53,6 +55,8 @@ class CleanUpProcess:
     def process_item(self, item):
         for key, val in item.items():
             if key == 'description':
+                item[key] = str(clean_description(html.unescape(val)))
+            if key == 'content':
                 item[key] = str(clean_description(html.unescape(val)))
             if key == 'encoded':
                 item[key] = str(clean_description(html.unescape(val)))

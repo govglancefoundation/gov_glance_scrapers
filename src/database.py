@@ -30,10 +30,15 @@ class ReadArticles:
         except errors.UndefinedTable as e:
             # Handle the UndefinedTable exception here
             logging.info(f"The table {table} does not exist.")
-            return False
+            return False            
         except Exception as e:
             logging.critical("Critical : %s", str(e))
             raise SystemExit(-1)
+        
+        finally: 
+            self.cur.close()
+            self.connection.close()
+            print("Connection closed.")
 
 class WriteItems:
 
@@ -50,8 +55,8 @@ class WriteItems:
 
 
     def process_item(self, items, table, topic): # Here we are going to get a dictionary or dataframe and publish new data
-        for item in items:
-            try:
+        try:
+            for item in items:
                 schema = self.schema
                 table_name = table.lower().replace(' ', '_')
 
@@ -81,8 +86,9 @@ class WriteItems:
                 '''
                 These appends are gor the columns that every table will need like id, topic, and collected_at
                 '''
+                collection_name = table.title().replace('_', ' ')
                 columns.append(f"""topic character varying COLLATE pg_catalog."default" DEFAULT '{topic}'::character varying""")
-                columns.append(f"""collection_name character varying COLLATE pg_catalog."default" DEFAULT '{table}'::character varying""")
+                columns.append(f"""collection_name character varying COLLATE pg_catalog."default" DEFAULT '{collection_name}'::character varying""")
 
                 columns.append(f"""CONSTRAINT {table_name}_pkey PRIMARY KEY (id)""")
                 columns.append("collected_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP")
@@ -102,5 +108,16 @@ class WriteItems:
                 self.cur.execute(query, item)
                 self.connection.commit()
                 logging.info(f"Value inserted {query}")
-            except Exception as e:
-                logging.critical("Critical : %s", str(e))
+        
+        except errors.UndefinedColumn as err:
+            # Handle the UndefinedTable exception here
+            print(item)
+            logging.info(f"The column {table} does not exist.")
+        
+        except Exception as e:
+            logging.critical("Critical : %s", str(e))
+        
+        finally:
+            self.cur.close()
+            self.connection.close()
+            print("Connection closed.")

@@ -1,6 +1,6 @@
 from process import clean_items
 from database import WriteItems, ReadArticles
-from response import Response
+from response import Response, Proxy
 from notification import SendNotification
 import logging
 import xml.etree.ElementTree as ET
@@ -9,21 +9,24 @@ load_dotenv()
 
 
 def main():
-    url = "https://presidente.gob.mx/feed/"      # url
-    table = 'presidente'                               # State name
-    schema = 'mexico'
-    topic = 'Ejecutivo'                                 # The topic of the scraper
-    branch = 'Ejecutivo'                              # The branch of the government
+    url = 'https://www.sonora.gob.mx/gobierno/acciones?format=feed&amp;type=rss'        # url
+    table = 'Sonora'   
+    schema = 'mexico'                               # State name
+    topic = 'State News'                            # The topic of the scraper
     link_variable_name = 'link'                     # Whatever the link variable name might be
-    notification_title = 'Noticias Presidenciales'    # Notification title
+    notification_title = 'Sonora'                  # Notification title
     item_name = 'item'                              # Make sure that you using the right item tag name
     format = 'xml'
-    headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36'}
     # notify = SendNotification()
-
+    headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36'}
+    proxy = Proxy().get_mexico_proxy()
+    proxies = {
+    'http': proxy,
+    'https': proxy
+    }
 
     resp = Response(table, topic, url, link_variable_name, item_name)
-    xml_string, response = resp.get_soup(format, headers=headers)
+    xml_string, response = resp.get_soup(format, headers=headers, proxies=proxies)
     print(xml_string)
     data = []
 
@@ -32,11 +35,10 @@ def main():
     """
     Edit the XML based on your needs
     """
-    for item in xml_string: 
+    for item in xml_string[:1]: 
         # print(item)
         entry_data = {}
         # Make sure to look for all the tags in content
-        
         tags = item.find_all()
         for tag in tags:
             if tag.name == 'enclosure':
@@ -44,7 +46,6 @@ def main():
             else:
                 text = tag.text.replace('\n', '')
                 entry_data[tag.name] = text
-        entry_data['branch'] = branch
         data.append(entry_data)
 
 
@@ -63,7 +64,7 @@ def main():
         print(number_of_items)
         cleaned = clean_items(items)
         print(cleaned)
-        WriteItems(schema=schema).process_item(cleaned, table, topic)
+        # WriteItems(schema=schema).process_item(cleaned, table, topic)
         # recent = notify.get_recent_value(cleaned)
         # message = notify.message(cleaned, recent['title'])
         # notify.notification_push(topic,notification_title, str(message))
