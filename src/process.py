@@ -66,7 +66,7 @@ class CleanUpProcess:
                 if isinstance(val, dict):
                     item[key] = val['#text']
             if key == 'title':
-                val = clean_description(val)
+                val = clean_description(html.unescape(val)).replace('\r','').replace('\n','')
                 item[key] = val.title()
         return item
     

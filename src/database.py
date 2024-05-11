@@ -23,9 +23,10 @@ class ReadArticles:
             self.cur.execute(f"""SELECT url FROM {self.schema}.{table} WHERE url = '{url}'""")
             results = [i[0] for i in self.cur.fetchall()]
             if results:
-                print(url +'exists!')
+                print(url +' ALREADY EXISTS!')
                 return True
             else:
+                print(url + " IS NEEDED!!!")
                 return False
         except errors.UndefinedTable as e:
             # Handle the UndefinedTable exception here
@@ -33,6 +34,7 @@ class ReadArticles:
             return False            
         except Exception as e:
             logging.critical("Critical : %s", str(e))
+            print(name, url)
             raise SystemExit(-1)
         
         finally: 
