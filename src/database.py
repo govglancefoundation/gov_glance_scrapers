@@ -114,7 +114,7 @@ class WriteItems:
         except errors.UndefinedColumn as err:
             # Handle the UndefinedTable exception here
             print(item)
-            logging.info(f"The column {table} does not exist.")
+            logging.info(f"Error: {err}")
         
         except Exception as e:
             logging.critical("Critical : %s", str(e))
