@@ -53,22 +53,28 @@ def clean_description(description):
 class CleanUpProcess:
 
     def process_item(self, item):
-        for key, val in item.items():
-            if key == 'description':
-                item[key] = str(clean_description(html.unescape(val)))
-            if key == 'content':
-                item[key] = str(clean_description(html.unescape(val)))
-            if key == 'encoded':
-                item[key] = str(clean_description(html.unescape(val)))
-            if key == 'created_at':
-                item[key] = str(dateutil.parser.parse(val))
-            if key == 'guid':
-                if isinstance(val, dict):
-                    item[key] = val['#text']
-            if key == 'title':
-                val = clean_description(html.unescape(val)).replace('\r','').replace('\n','')
-                item[key] = val.title()
-        return item
+        required_keys = ('url', 'title', 'created_at')
+        if set(required_keys).issubset(item.keys()):
+            for key, val in item.items():
+                if key == 'description':
+                    item[key] = str(clean_description(html.unescape(val))).title()
+                if key == 'content':
+                    item[key] = str(clean_description(html.unescape(val)))
+                if key == 'encoded':
+                    item[key] = str(clean_description(html.unescape(val)))
+                if key == 'created_at':
+                    item[key] = str(dateutil.parser.parse(val))
+                if key == 'guid':
+                    if isinstance(val, dict):
+                        item[key] = val['#text']
+                if key == 'title':
+                    val = clean_description(html.unescape(val)).replace('\r','').replace('\n','')
+                    item[key] = val.title()
+            return item
+        else:
+            logging.critical("Critical: This item need required keys. Placing in txt file to investigate", item)
+            with open('log/critical_items_add_to_db_manually.txt', 'a') as f:
+                f.write(str(item) + '\n')
     
 def clean_items(content: list):
     cleaned = []

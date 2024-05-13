@@ -2,52 +2,61 @@ from process import clean_items
 from database import WriteItems, ReadArticles
 from response import Response
 from notification import SendNotification
-from bs4 import BeautifulSoup
 import logging
 import xml.etree.ElementTree as ET
-import re 
 from dotenv import load_dotenv
 load_dotenv()
+import json
 
-
+'''
+This scraper needs batching due to the high number of articles
+'''
 def main():
-    url = 'https://azgovernor.gov/newsroom/feed'    # url
-    table = 'arizona'                  # State name
+    url = "https://news.mt.gov/Governors-Office/articles.json"      # url
+    table = 'Montana'                               # State name
     schema = 'united_states_of_america'
-    topic = 'State Governer News'                   # The topic of the scraper
+    topic = 'State Governer News'                                 # The topic of the scraper
     link_variable_name = 'link'                     # Whatever the link variable name might be
-    notification_title = 'Arizona State Updates'    # Notification title
-    item_name = 'item'                              # Make sure that you using the right item tag name
-    format = 'xml'
+    notification_title = 'Montana State Updates'    # Notification title
+    item_name = None                           # Make sure that you using the right item tag name
+    format = 'json'
     # notify = SendNotification()
 
 
     resp = Response(table, topic, url, link_variable_name, item_name)
-    xml_string, response = resp.get_soup(format)
-    print(xml_string)
-    # print(xml_string)
+    response = resp.request_content()
+    json_payload = json.loads(response.content)
+    # print(json_payload)
     data = []
-    print(len(xml_string))
+
 
 
     """
     Edit the XML based on your needs
     """
-    for item in xml_string: 
+    for item in json_payload: 
         # print(item)
         entry_data = {}
         # Make sure to look for all the tags in content
-        tags = item.find_all()
-        for tag in tags:
-            if tag.name == 'enclosure':
-                entry_data['enclosure'] = item.find('enclosure')['url']
-            else:
-                text = tag.text.replace('\n', '')
-                entry_data[tag.name] = text
+        entry_data['title'] = item.get('title')
+        entry_data['link'] = item.get('link')
+        entry_data['description'] = item.get('summary')
+        entry_data['teaser'] = item.get('teaser')
+        entry_data['author'] = item.get('author')
+        entry_data['pubDate'] = item.get('date')
+        if item.get('image') is not None:
+            entry_data['image'] = item.get('image', {}).get('src')
+        if item.get('agency') is not None:
+            entry_data['agency_name'] = item.get('agency', {}).get('name')
+            entry_data['agency_link'] = item.get('agency', {}).get('link')
+        if item.get('tag') is not None:
+            entry_data['tag_name'] = item.get('tag', {}).get('name')
+            entry_data['tag_link'] = item.get('tag', {}).get('link')
+        
         data.append(entry_data)
 
 
-    print(data)
+    # print(data)
 
     items = []
     for item in data:
@@ -75,4 +84,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
