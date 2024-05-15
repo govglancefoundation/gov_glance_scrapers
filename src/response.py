@@ -4,6 +4,8 @@ from scrapeops_python_requests.scrapeops_requests import ScrapeOpsRequests
 import os
 import json
 from dotenv import load_dotenv
+from selenium import webdriver 
+from selenium.webdriver import FirefoxOptions
 load_dotenv()
 
 logging.basicConfig(
@@ -50,8 +52,16 @@ class Response:
         xml_string = soup.find_all(self.item_name)
         return xml_string, response
     
+    def web_driver(self, format):
+        opts = FirefoxOptions()
+        opts.add_argument("--headless")
+        driver = webdriver.Firefox(options=opts)
+        content = (driver.page_source)
+        driver.quit()
+        soup = BeautifulSoup(content, features="html.parser")
+        return soup
+
     def log_item(self, item, response):
-        logging.info(f'New item found{item}')
         self.scrapeops_logger.item_scraped(
                 response=response,
                 item=item,

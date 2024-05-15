@@ -20,7 +20,8 @@ class ReadArticles:
         try:
             
             table = name.lower().replace(' ', '_')
-            self.cur.execute(f"""SELECT url FROM {self.schema}.{table} WHERE url = '{url}'""")
+            query = '''SELECT url FROM {schema}.{table} WHERE url = %s'''.format(schema=self.schema, table=table)
+            self.cur.execute(query, (url,))
             results = [i[0] for i in self.cur.fetchall()]
             if results:
                 print(url +' ALREADY EXISTS!')
@@ -33,7 +34,7 @@ class ReadArticles:
             logging.info(f"The table {table} does not exist.")
             return False            
         except Exception as e:
-            logging.critical("Critical : %s", str(e))
+            logging.critical("Critical : %s", str(e), url)
             print(name, url)
             raise SystemExit(-1)
         
@@ -106,11 +107,9 @@ class WriteItems:
                 values = ', '.join('%({})s'.format(key) for key in item.keys())
                 print(item)
                 query = f"INSERT INTO {schema}.{table_name} ({columns}) VALUES ({values})"
-                print(f"Item inserted to {schema}.{table_name}")
                 self.cur.execute(query, item)
                 self.connection.commit()
-                logging.info(f"Value inserted {query}")
-        
+                print(f"Item inserted to {schema}.{table_name}")
         except errors.UndefinedColumn as err:
             # Handle the UndefinedTable exception here
             print(item)
@@ -118,6 +117,7 @@ class WriteItems:
         
         except Exception as e:
             logging.critical("Critical : %s", str(e))
+            print(item)
         
         finally:
             self.cur.close()
