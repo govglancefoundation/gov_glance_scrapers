@@ -1,8 +1,8 @@
 from process import clean_items
 from database import WriteItems, ReadArticles
 from response import Response
-from bs4 import BeautifulSoup
 from notification import SendNotification
+from bs4 import BeautifulSoup
 import logging
 import xml.etree.ElementTree as ET
 import json
@@ -12,23 +12,24 @@ load_dotenv()
 
 
 def main():
-    url = 'https://governor.ohio.gov/wps/wcm/connect/gov/Ohio%20Content%20English/governor?source=library&srv=cmpnt&cmpntid=67577e5a-f3af-4498-a9e3-0696d21ac7c9&location=Ohio+Content+English%2F%2Fgovernor%2Fmedia%2Fnews-and-media&category='           # url
-    table = 'Ohio'   
+
+    url = 'https://www.governor.ny.gov/views/ajax?page=2&_wrapper_format=drupal_ajax&view_name=filter_frame&view_display_id=news&view_args=&view_path=%2Fnode%2F103706&view_base_path=&view_dom_id=da805a9c6ad82f79f432dfe9c43fbbbcf9524501543fe3af0055109cc117d9fc&pager_element=0&page=0&_drupal_ajax=1&ajax_page_state%5Btheme%5D=nygov_theme&ajax_page_state%5Btheme_token%5D=&ajax_page_state%5Blibraries%5D=better_exposed_filters%2Fauto_submit%2Cbetter_exposed_filters%2Fdatepickers%2Cbetter_exposed_filters%2Fgeneral%2Cbetter_exposed_filters%2Fselect_all_none%2Cclassy%2Fbase%2Cclassy%2Fmessages%2Ccore%2Fnormalize%2Cgoogle_analytics%2Fgoogle_analytics%2Cnygov_core%2Fnygov-core%2Cnygov_theme%2Fglobal-styling%2Cnygov_theme%2Fnygov-textfill%2Cnygov_theme%2Fresponsive-table%2Csystem%2Fbase%2Cviews%2Fviews.ajax%2Cviews%2Fviews.module'         # url
+    table = 'New York'   
     schema = 'united_states_of_america'                                                                 # State name
     topic = 'state'                                                 # The topic of the scraper
     link_variable_name = 'link'                                      # Whatever the link variable name might be
-    notification_title = 'Ohio State Updates'                    # Notification title
+    notification_title = 'New York State Updates'                    # Notification title
     item_name = 'data'                                           # Make sure that you using the right item tag name
     format = 'html.parser'
     # notify = SendNotification()
-    headers = {'User-Agent': "Mozilla/5.0 (iPhone; CPU iPhone OS 13_5_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.1.1 Mobile/15E148 Safari/604.1"}
-
 
 
     resp = Response(table, topic, url, link_variable_name, item_name)
-    response = resp.request_content(headers=headers)
-    json_payload = json.loads(response.content)    
+    response = resp.request_content()
 
+    payload = json.loads(response.content)[2]
+    soup = BeautifulSoup(payload['data'], features='html.parser')
+    content = soup.find_all('article')
     # content = table_content.find_all('article',{'class':'news-item'})
 
     data = []
@@ -36,21 +37,19 @@ def main():
     """
     Edit the XML based on your needs
     """
-    for item in json_payload[:10]: 
+    for item in content[:15]: 
         print(item)
         entry_data = {}
-        
-        entry_data['uuid'] = item.get('uuid')
-        entry_data['title'] = item.get('title')
-        if item.get('url'):
-            entry_data['link'] = 'https://governor.ohio.gov' +item.get('url') 
-        entry_data['description'] = item.get('summary')
-        entry_data['pubDate'] = item.get('startTimeWCM')
-        if item.get('thumbnail'):
-            entry_data['thumbnail'] = 'https://governor.ohio.gov' + item.get('thumbnail')
-        else:
-            entry_data['thumbnail'] = None
 
+        if item.find('a') is not None:
+            entry_data['link'] = 'https://www.governor.ny.gov/' + item.find('a')['href']
+            entry_data['title'] = item.find('a').text
+        if item.find('div', {'class': 'content-dates'}) is not None:
+            entry_data['pubDate'] = item.find('div', {'class': 'content-dates'}).text.replace(' | ', ' ')
+        if item.find('div', {'class': 'content-description'}) is not None:
+            entry_data['description'] = item.find('div', {'class': 'content-description'}).text
+        if item.find('img') is not None:
+            entry_data['img'] = 'https://www.governor.ny.gov/' + item.find('img')['src']
         data.append(entry_data)
 
     print(data)

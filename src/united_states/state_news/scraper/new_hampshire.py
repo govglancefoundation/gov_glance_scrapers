@@ -10,12 +10,10 @@ from dotenv import load_dotenv
 load_dotenv()
 
 
-'''
-might need to add batch processing. There are a lot of articles on this page
-'''
+
 
 def main():
-    url = ' https://www.governor.nh.gov/content/api/news?q=&sort=field_date%7Cdesc%7CALLOW_NULLS&view=list&page=1&size=10'           # url
+    url = 'https://www.governor.nh.gov/content/api/news?q=&sort=field_date%7Cdesc%7CALLOW_NULLS&view=list&page=1&size=10'           # url
     table = 'New Hampshire'   
     schema = 'united_states_of_america'                                                                 # State name
     topic = 'state'                                                 # The topic of the scraper

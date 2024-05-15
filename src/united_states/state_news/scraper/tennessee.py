@@ -1,60 +1,52 @@
 from process import clean_items
 from database import WriteItems, ReadArticles
 from response import Response
-from bs4 import BeautifulSoup
 from notification import SendNotification
+from bs4 import BeautifulSoup
 import logging
 import xml.etree.ElementTree as ET
-import json
+import re 
 from dotenv import load_dotenv
 load_dotenv()
 
 
-
-
 def main():
-    url = 'https://oklahoma.gov/content/sok-wcm/en/governor/newsroom/newsroom/jcr:content/responsivegrid-second/newslisting.json?page=2&q='           # url
-    table = 'Oklahoma'   
+    url = 'https://www.tn.gov/governor/news.html'           # url
+    table = 'Tennessee'   
     schema = 'united_states_of_america'                                                                 # State name
     topic = 'state'                                                 # The topic of the scraper
     link_variable_name = 'link'                                      # Whatever the link variable name might be
-    notification_title = 'Oklahoma State Updates'                    # Notification title
-    item_name = 'items'                                           # Make sure that you using the right item tag name
+    notification_title = 'Tennessee State Updates'                    # Notification title
+    item_name = 'article'                                           # Make sure that you using the right item tag name
     format = 'html.parser'
     # notify = SendNotification()
-    headers = {'User-Agent': "Mozilla/5.0 (iPhone; CPU iPhone OS 13_5_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.1.1 Mobile/15E148 Safari/604.1"}
-
 
 
     resp = Response(table, topic, url, link_variable_name, item_name)
-    json_payload, response = resp.request_content_json()
-
-
-    # content = table_content.find_all('article',{'class':'news-item'})
+    response = resp.request_content()
+    soup = BeautifulSoup(response.content, format).find('div', {'class':'tn-newsroomresults'})
+    content = soup.find_all('article')
 
     data = []
+    print(len(content))
 
     """
     Edit the XML based on your needs
     """
-    for item in json_payload:
-        print(item)
-        entry_data = {}
-        
-        entry_data['link'] = 'https://oklahoma.gov' + item.get('newsUrl')
-        entry_data['title'] = item.get('title')
-        if item.get('thumbnail'):
-            entry_data['thumbnail'] = 'https://oklahoma.gov' + item.get('thumbnail')
-        entry_data['news_alt_text'] = item.get('newsAltText')
-        entry_data['category'] = item.get('category')
-        entry_data['agency'] = item.get('agency')
-        entry_data['pubDate'] = item.get('lastModified')
-        if item.get('description'):
-            entry_data['description'] = item.get('description')
-        else:
-            entry_data['description'] = ''
+    for item in content: 
+        item_dict = {}
 
-        data.append(entry_data)
+        if item.find('a') is not None:
+            if str(item.find('a')['href']).startswith(('http://', 'https://')):
+                item_dict['link'] = (item.find('a')['href'])
+            else:
+                item_dict['link'] = 'https://governor.wa.gov/'+(item.find('a')['href'])
+            item_dict['title'] = item.find('a').text 
+        if item.find('div') is not None:
+            item_dict['pubDate'] = item.find('div',{'class':'date'}).text.replace(' | ', ' ')
+        if item.find('p'):
+            item_dict['description'] = item.find('p').text
+        data.append(item_dict)
 
     print(data)
 

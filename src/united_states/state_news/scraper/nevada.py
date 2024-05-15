@@ -10,9 +10,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 
-'''
-might need to add batch processing. There are a lot of articles on this page
-'''
+
 
 def main():
     url = 'https://gov.nv.gov/Newsroom/PRs/news-releases/'           # url
@@ -38,7 +36,7 @@ def main():
     """
     Edit the XML based on your needs
     """
-    for item in content: 
+    for item in content[:10]: 
         print(item)
         item_dict = {}
 

@@ -8,9 +8,8 @@ from dotenv import load_dotenv
 load_dotenv()
 import json
 
-'''
-This scraper needs batching due to the high number of articles
-'''
+
+
 def main():
     url = "https://news.mt.gov/Governors-Office/articles.json"      # url
     table = 'Montana'                               # State name
@@ -34,7 +33,7 @@ def main():
     """
     Edit the XML based on your needs
     """
-    for item in json_payload: 
+    for item in json_payload[:10]: 
         # print(item)
         entry_data = {}
         # Make sure to look for all the tags in content

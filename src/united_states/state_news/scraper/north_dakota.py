@@ -8,9 +8,6 @@ from dotenv import load_dotenv
 load_dotenv()
 
 
-'''
-I need to do batching if I want to make this script efficiently
-'''
 
 def main():
     url = "https://www.governor.nd.gov/rss/news"      # url

@@ -8,9 +8,6 @@ from dotenv import load_dotenv
 load_dotenv()
 
 
-'''
-I need to do batching if I want to make this script efficiently
-'''
 
 def main():
     url = "https://governor.nc.gov/news/feed"      # url
@@ -35,7 +32,7 @@ def main():
     """
     Edit the XML based on your needs
     """
-    for item in xml_string: 
+    for item in xml_string[:10]: 
         # print(item)
         entry_data = {}
         # Make sure to look for all the tags in content

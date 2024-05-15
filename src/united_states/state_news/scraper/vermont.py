@@ -2,20 +2,21 @@ from process import clean_items
 from database import WriteItems, ReadArticles
 from response import Response
 from notification import SendNotification
+from bs4 import BeautifulSoup
 import logging
 import xml.etree.ElementTree as ET
+import re 
 from dotenv import load_dotenv
 load_dotenv()
 
 
-
 def main():
-    url = "https://governor.maryland.gov/_layouts/15/MD.SharePoint.ToolKit.News/Rss.aspx?site=%2fnews%2fpress"      # url
-    table = 'Maryland'   
-    schema = 'united_states_of_america'                            # State name
-    topic = 'state'                                 # The topic of the scraper
+    url = 'http://governor.vermont.gov/taxonomy/term/3/feed' 
+    table = 'Vermont'                           # State name
+    schema = 'united_states_of_america'
+    topic = 'State Governer News'                   # The topic of the scraper
     link_variable_name = 'link'                     # Whatever the link variable name might be
-    notification_title = 'Maryland State Updates'    # Notification title
+    notification_title = 'Vermont State Updates'    # Notification title
     item_name = 'item'                              # Make sure that you using the right item tag name
     format = 'xml'
     # notify = SendNotification()
@@ -24,28 +25,30 @@ def main():
     resp = Response(table, topic, url, link_variable_name, item_name)
     xml_string, response = resp.get_soup(format)
     print(xml_string)
+    # print(xml_string)
     data = []
-
+    print(len(xml_string))
 
 
     """
     Edit the XML based on your needs
     """
-    for item in xml_string[:10]: 
+    for item in xml_string: 
         # print(item)
         entry_data = {}
         # Make sure to look for all the tags in content
         tags = item.find_all()
         for tag in tags:
-            if tag.name == 'enclosure':
-                entry_data['enclosure'] = item.find('enclosure')['url']
+            if tag.name == 'date':
+                print(tag.text)
+                entry_data['pubDate'] = tag.text
             else:
                 text = tag.text.replace('\n', '')
                 entry_data[tag.name] = text
         data.append(entry_data)
 
 
-    # print(data)
+    print(data)
 
     items = []
     for item in data:
@@ -61,13 +64,13 @@ def main():
         cleaned = clean_items(items)
         print(cleaned)
         WriteItems(schema=schema).process_item(cleaned, table, topic)
-        # recent = notify.get_recent_value(cleaned)
-        # message = notify.message(cleaned, recent['title'])
-        # notify.notification_push(topic,notification_title, str(message))
+    #     # recent = notify.get_recent_value(cleaned)
+    #     # message = notify.message(cleaned, recent['title'])
+    #     # notify.notification_push(topic,notification_title, str(message))
         
-        logging.info(f'The total items needed for {table.title()} are: {number_of_items}')
-    else:
-        logging.info(f'No new items found for {table.title()}')
+    #     logging.info(f'The total items needed for {table.title()} are: {number_of_items}')
+    # else:
+    #     logging.info(f'No new items found for {table.title()}')
 
 
 

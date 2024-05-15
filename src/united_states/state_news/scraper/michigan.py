@@ -2,53 +2,51 @@ from process import clean_items
 from database import WriteItems, ReadArticles
 from response import Response
 from notification import SendNotification
-from bs4 import BeautifulSoup
 import logging
 import xml.etree.ElementTree as ET
-import re 
+from bs4 import BeautifulSoup
 from dotenv import load_dotenv
 load_dotenv()
 
 
 def main():
-    url = 'https://governor.ri.gov/press-releases.xml'    # url
-    table = 'Rhode Island'                  # State name
+    url = "https://www.michigan.gov/whitmer/sxa/search/results/?s={B7A692F7-5CC1-4AC2-8F1D-380CA54F9735}|{62E9FB6A-7717-4EF1-832C-E5ECBB9BB2D9}&itemid={DBE1F425-5DD1-4626-81EA-C19119DBC337}&sig=&autoFireSearch=true&v=%7BB7A22BE8-17FC-44A5-83BC-F54442A57941%7D&p=10&o=Article%20Date%2CDescending"      # url
+    table = 'Michigan'                               # State name
     schema = 'united_states_of_america'
-    topic = 'State Governer News'                   # The topic of the scraper
+    topic = 'State Governer News'                                 # The topic of the scraper
     link_variable_name = 'link'                     # Whatever the link variable name might be
-    notification_title = 'Rhode Island State Updates'    # Notification title
-    item_name = 'item'                              # Make sure that you using the right item tag name
-    format = 'xml'
+    notification_title = 'Michigan State Updates'    # Notification title
+    item_name = 'Results'                              # Make sure that you using the right item tag name
+    format = 'json'
     # notify = SendNotification()
     headers = {'User-Agent': "Mozilla/5.0 (iPhone; CPU iPhone OS 13_5_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.1.1 Mobile/15E148 Safari/604.1"}
 
-
     resp = Response(table, topic, url, link_variable_name, item_name)
-    xml_string, response = resp.get_soup(format, headers=headers)
-    print(xml_string)
-    # print(xml_string)
+    json_payload, response = resp.request_content_json(headers=headers)
+    # print(json_payload)
     data = []
-    print(len(xml_string))
+
 
 
     """
     Edit the XML based on your needs
     """
-    for item in xml_string: 
-        # print(item)
+    for item in json_payload: 
+        print(item)
+        soup = BeautifulSoup(item["Html"], features ='html.parser')
+
         entry_data = {}
         # Make sure to look for all the tags in content
-        tags = item.find_all()
-        for tag in tags:
-            if tag.name == 'enclosure':
-                entry_data['enclosure'] = item.find('enclosure')['url']
-            else:
-                text = tag.text.replace('\n', '')
-                entry_data[tag.name] = text
+        if soup.find('a'):
+            entry_data['link'] = 'https://www.michigan.gov' +soup.find('a')['href']
+            entry_data['title'] = soup.find('a').text.lstrip().rstrip()
+        if soup.find('strong'):
+            entry_data['pubDate'] = soup.find('strong', {'class':'upcoming-event-location'}).text.lstrip().rstrip()
+        print(entry_data)
         data.append(entry_data)
 
 
-    print(data)
+    # print(data)
 
     items = []
     for item in data:
@@ -76,4 +74,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
