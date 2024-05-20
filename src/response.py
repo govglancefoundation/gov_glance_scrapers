@@ -38,7 +38,7 @@ class Response:
     def requests_(self, proxies=None, verify=None):
         requests = self.scrapeops_logger.RequestsWrapper()
         response = requests.get(self.link, proxies=proxies, verify=verify)
-        
+
         return response
     def request_content(self, proxies=None, verify=None):  
         requests = self.scrapeops_logger.RequestsWrapper()
@@ -52,9 +52,13 @@ class Response:
         res.html.render()
         return  res.html.find(tag_name), res
     
-    def request_content_post(self, proxies=None, data=None, verify=None):
+    def request_content_post(self, headers =None, proxies=None, data=None, verify=None):
+        if headers:
+            headers = headers
+        else:
+            headers= self.headers
         requests = self.scrapeops_logger.RequestsWrapper()
-        response = requests.post(self.link, proxies=proxies, headers=self.headers, json=data, verify=verify)
+        response = requests.post(self.link, proxies=proxies, headers=headers, json=data, verify=verify)
         return response
     
     def request_content_json(self, proxies=None, verify=None):
