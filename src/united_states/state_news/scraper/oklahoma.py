@@ -22,7 +22,7 @@ def main():
     item_name = 'items'                                           # Make sure that you using the right item tag name
     format = 'html.parser'
     # notify = SendNotification()
-    headers = {'User-Agent': "Mozilla/5.0 (iPhone; CPU iPhone OS 13_5_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.1.1 Mobile/15E148 Safari/604.1"}
+    
 
 
 
@@ -75,9 +75,9 @@ def main():
     # #     # message = notify.message(cleaned, recent['title'])
     # #     # notify.notification_push(topic,notification_title, str(message))
         
-    #     logging.info(f'The total items needed for {table.title()} are: {number_of_items}')
-    # else:
-    #     logging.info(f'No new items found for {table.title()}')
+        logging.info(f'The total items needed for {table.title()} are: {number_of_items}')
+    else:
+        logging.info(f'No new items found for {table.title()}')
 
 
 

@@ -3,6 +3,7 @@ from database import WriteItems, ReadArticles
 from response import Response
 from notification import SendNotification
 import logging
+import json
 import xml.etree.ElementTree as ET
 from dotenv import load_dotenv
 load_dotenv()
@@ -21,7 +22,8 @@ def main():
 
 
     resp = Response(table, topic, url, link_variable_name, item_name)
-    json_payload, response = resp.request_content_json()
+    response = resp.request_content()
+    json_payload = json.loads(response.content)
     # print(json_payload)
     data = []
 
@@ -68,9 +70,9 @@ def main():
     #     # message = notify.message(cleaned, recent['title'])
     #     # notify.notification_push(topic,notification_title, str(message))
         
-    #     logging.info(f'The total items needed for {table.title()} are: {number_of_items}')
-    # else:
-    #     logging.info(f'No new items found for {table.title()}')
+        logging.info(f'The total items needed for {table.title()} are: {number_of_items}')
+    else:
+        logging.info(f'No new items found for {table.title()}')
 
 
 

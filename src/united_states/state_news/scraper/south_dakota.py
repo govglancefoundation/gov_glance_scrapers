@@ -33,7 +33,7 @@ def main():
     """
     Edit the XML based on your needs
     """
-    for item in content: 
+    for item in content[:10]: 
         item_dict = {}
 
         if item.find('a') is not None:
@@ -65,9 +65,9 @@ def main():
     # #     # message = notify.message(cleaned, recent['title'])
     # #     # notify.notification_push(topic,notification_title, str(message))
         
-    #     logging.info(f'The total items needed for {table.title()} are: {number_of_items}')
-    # else:
-    #     logging.info(f'No new items found for {table.title()}')
+        logging.info(f'The total items needed for {table.title()} are: {number_of_items}')
+    else:
+        logging.info(f'No new items found for {table.title()}')
 
 
 

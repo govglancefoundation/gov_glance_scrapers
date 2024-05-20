@@ -1,12 +1,13 @@
 from process import clean_items
 from database import WriteItems, ReadArticles
-from response import Response
+from response import FreeProxy, Response
 from notification import SendNotification
 import logging
 import xml.etree.ElementTree as ET
 from dotenv import load_dotenv
 load_dotenv()
-
+from lxml.html import fromstring
+from bs4 import BeautifulSoup
 
 
 
@@ -20,12 +21,20 @@ def main():
     item_name = 'item'                              # Make sure that you using the right item tag name
     format = 'xml'
     # notify = SendNotification()
-    headers = {'User-Agent': "Mozilla/5.0 (iPhone; CPU iPhone OS 13_5_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.1.1 Mobile/15E148 Safari/604.1"}
-
+    
 
     resp = Response(table, topic, url, link_variable_name, item_name)
-    xml_string, response = resp.get_soup(format, verify=False, headers=headers)
-    print(xml_string)
+    # xml_string, response = resp.request_content(format, verify=False)
+    response = resp.requests_(verify=False)
+    print(response.content)
+    xml_string = BeautifulSoup(response.content, 'xml').find_all('item')
+    # resp = FreeProxy(table, topic)
+    # soup, response = resp.use_free_proxies_request(url)
+    # print(response.content)
+    # xml_string = soup.find_all('item')
+    # xml_string, response = resp.get_soup(format, verify=False)
+    # print(response.status_code)
+    # print(response.content)
     data = []
 
 
@@ -39,15 +48,15 @@ def main():
         # Make sure to look for all the tags in content
         tags = item.find_all()
         for tag in tags:
-            if tag.name == 'enclosure':
-                entry_data['enclosure'] = item.find('enclosure')['url']
+            if tag.name == 'pubdate':
+                entry_data['pubDate'] = item.find('pubdate')
             else:
                 text = tag.text.replace('\n', '')
                 entry_data[tag.name] = text
         data.append(entry_data)
 
 
-    # print(data)
+    print(data)
 
     items = []
     for item in data:

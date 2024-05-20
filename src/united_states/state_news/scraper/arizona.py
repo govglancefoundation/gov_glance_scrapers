@@ -33,7 +33,7 @@ def main():
     """
     Edit the XML based on your needs
     """
-    for item in xml_string: 
+    for item in xml_string[:10]: 
         # print(item)
         entry_data = {}
         # Make sure to look for all the tags in content
@@ -67,9 +67,9 @@ def main():
     #     # message = notify.message(cleaned, recent['title'])
     #     # notify.notification_push(topic,notification_title, str(message))
         
-    #     logging.info(f'The total items needed for {table.title()} are: {number_of_items}')
-    # else:
-    #     logging.info(f'No new items found for {table.title()}')
+        logging.info(f'The total items needed for {table.title()} are: {number_of_items}')
+    else:
+        logging.info(f'No new items found for {table.title()}')
 
 
 

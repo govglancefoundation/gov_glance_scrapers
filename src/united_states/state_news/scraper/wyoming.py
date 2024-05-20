@@ -47,7 +47,7 @@ def main():
 
     resp = Response(table, topic, url, link_variable_name, item_name)
 
-    response = resp.request_content_post(headers=headers, data=data)
+    response = resp.request_content_post( data=data)
     # print(xml_string)
     data = []
     payload = json.loads(response.text)
@@ -86,9 +86,9 @@ def main():
     #     # message = notify.message(cleaned, recent['title'])
     #     # notify.notification_push(topic,notification_title, str(message))
         
-    #     logging.info(f'The total items needed for {table.title()} are: {number_of_items}')
-    # else:
-    #     logging.info(f'No new items found for {table.title()}')
+        logging.info(f'The total items needed for {table.title()} are: {number_of_items}')
+    else:
+        logging.info(f'No new items found for {table.title()}')
 
 
 

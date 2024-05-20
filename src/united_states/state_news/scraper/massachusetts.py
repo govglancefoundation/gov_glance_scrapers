@@ -29,7 +29,6 @@ def main():
     content = table_content.find_all('section')
 
     data = []
-    print(len(content))
 
     """
     Edit the XML based on your needs
@@ -68,9 +67,9 @@ def main():
     # #     # message = notify.message(cleaned, recent['title'])
     # #     # notify.notification_push(topic,notification_title, str(message))
         
-    #     logging.info(f'The total items needed for {table.title()} are: {number_of_items}')
-    # else:
-    #     logging.info(f'No new items found for {table.title()}')
+        logging.info(f'The total items needed for {table.title()} are: {number_of_items}')
+    else:
+        logging.info(f'No new items found for {table.title()}')
 
 
 

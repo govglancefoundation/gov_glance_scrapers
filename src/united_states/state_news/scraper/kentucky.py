@@ -31,7 +31,7 @@ def main():
     headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36'}
 
     resp = Response(table, topic, url, link_variable_name, item_name)
-    response = resp.request_content(headers=headers)
+    response = resp.request_content()
     # print(xml_string)
     json_string = re.search(r'\{.*\}', response.text, re.DOTALL).group()
     payload = json.loads(json_string)
@@ -72,9 +72,9 @@ def main():
         # message = notify.message(cleaned, recent['title'])
         # notify.notification_push(topic,notification_title, str(message))
         
-    #     logging.info(f'The total items needed for {table.title()} are: {number_of_items}')
-    # else:
-    #     logging.info(f'No new items found for {table.title()}')
+        logging.info(f'The total items needed for {table.title()} are: {number_of_items}')
+    else:
+        logging.info(f'No new items found for {table.title()}')
 
 
 

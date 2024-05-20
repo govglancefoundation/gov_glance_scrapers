@@ -11,12 +11,12 @@ load_dotenv()
 
 
 def main():
-    url = 'https://governor.nebraska.gov/'           # url
-    table = 'Nebraska'   
+    url = 'https://www.fortaleza.pr.gov/ordenes-ejecutivas'           # url
+    table = 'Puerto Rico'   
     schema = 'united_states_of_america'                                                                 # State name
     topic = 'state'                                                 # The topic of the scraper
     link_variable_name = 'link'                                      # Whatever the link variable name might be
-    notification_title = 'Nebraska State Updates'                    # Notification title
+    notification_title = 'Puerto Rico State Updates'                    # Notification title
     item_name = 'article'                                           # Make sure that you using the right item tag name
     format = 'html.parser'
     # notify = SendNotification()
@@ -25,8 +25,8 @@ def main():
     resp = Response(table, topic, url, link_variable_name, item_name)
     response = resp.request_content()
     soup = BeautifulSoup(response.content, format)
-    table_content = soup.find('div', {'class':'item-list'})
-    content = table_content.find_all('li')
+    table_content = soup.find('div', {'class':'collection-list w-dyn-items'})
+    content = table_content.find_all('div', {'class':'collection-item w-dyn-item'})
 
     data = []
     print(len(content))
@@ -34,16 +34,14 @@ def main():
     """
     Edit the XML based on your needs
     """
-    for item in content: 
+    for item in content[:1]: 
         item_dict = {}
 
         if item.find('a') is not None:
-            item_dict['title'] = item.find('a').text
-            item_dict['link'] = 'https://governor.nebraska.gov'+(item.find('a')['href']) # this is the pubDate
+            item_dict['link'] = 'https://www.fortaleza.pr.gov'+(item.find('a')['href']) # this is the pubDate
         if item.find('div') is not None:
-            item_dict['pubDate'] = item.find('div', {'class':'views-field views-field-created'}).text
-        if item.find('span') is not None:
-            item_dict['description'] = item.find('span', {'class':'field-content'}).text
+            item_dict['title'] = item.find('div', {'class': 'minicard-title-2'}).text
+            item_dict['pubDate'] = (item.find('div',{'class', 'text-block-38'}).text)
         data.append(item_dict)
 
     print(data)
@@ -60,7 +58,7 @@ def main():
         print(number_of_items)
         cleaned = clean_items(items)
         print(cleaned)
-        WriteItems(schema=schema).process_item(cleaned, table, topic)
+        # WriteItems(schema=schema).process_item(cleaned, table, topic)
     # #     # recent = notify.get_recent_value(cleaned)
     # #     # message = notify.message(cleaned, recent['title'])
     # #     # notify.notification_push(topic,notification_title, str(message))
