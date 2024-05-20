@@ -47,7 +47,7 @@ def main():
 
     resp = Response(table, topic, url, link_variable_name, item_name)
 
-    response = resp.request_content_post( data=data)
+    response = resp.request_content_post(headers=headers, data=data)
     # print(xml_string)
     data = []
     payload = json.loads(response.text)
