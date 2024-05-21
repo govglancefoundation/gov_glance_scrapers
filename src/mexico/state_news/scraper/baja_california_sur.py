@@ -18,11 +18,10 @@ def main():
     item_name = 'item'                              # Make sure that you using the right item tag name
     format = 'xml'
     # notify = SendNotification()
-    headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36'}
 
 
     resp = Response(table, topic, url, link_variable_name, item_name)
-    xml_string, response = resp.get_soup(format, headers=headers, verify=False)
+    xml_string, response = resp.get_soup(format, verify=False)
     print(xml_string)
     data = []
 

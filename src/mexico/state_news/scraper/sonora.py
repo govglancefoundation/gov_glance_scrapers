@@ -26,7 +26,7 @@ def main():
     }
 
     resp = Response(table, topic, url, link_variable_name, item_name)
-    xml_string, response = resp.get_soup(format, headers=headers, proxies=proxies)
+    xml_string, response = resp.get_soup(format, proxies=proxies)
     print(xml_string)
     data = []
 
@@ -64,7 +64,7 @@ def main():
         print(number_of_items)
         cleaned = clean_items(items)
         print(cleaned)
-        # WriteItems(schema=schema).process_item(cleaned, table, topic)
+        WriteItems(schema=schema).process_item(cleaned, table, topic)
         # recent = notify.get_recent_value(cleaned)
         # message = notify.message(cleaned, recent['title'])
         # notify.notification_push(topic,notification_title, str(message))

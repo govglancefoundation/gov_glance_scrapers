@@ -18,11 +18,10 @@ def main():
     item_name = 'items'                          # Make sure that you using the right item tag name
     format = 'json'
     # notify = SendNotification()
-    headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36'}
 
 
     resp = Response(table, topic, url, link_variable_name, item_name)
-    json_payload, response = resp.request_content_json(headers=headers)
+    json_payload, response = resp.request_content_json()
     print(json_payload)
     data = []
 

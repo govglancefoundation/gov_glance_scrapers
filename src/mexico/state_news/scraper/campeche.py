@@ -22,7 +22,7 @@ def main():
 
 
     resp = Response(table, topic, url, link_variable_name, item_name)
-    xml_string, response = resp.get_soup(format, headers=headers, verify=False)
+    xml_string, response = resp.get_soup(format, verify=False)
     print(xml_string)
     data = []
 

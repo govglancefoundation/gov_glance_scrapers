@@ -1,6 +1,6 @@
 from process import clean_items
 from database import WriteItems, ReadArticles
-from response import Response
+from response import Response, Proxy
 from notification import SendNotification
 import logging
 import xml.etree.ElementTree as ET
@@ -20,9 +20,11 @@ def main():
     # notify = SendNotification()
     headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36'}
 
-
+    proxy = Proxy().get_mexico_proxy()
+    print(proxy)
     resp = Response(table, topic, url, link_variable_name, item_name)
-    xml_string, response = resp.get_soup(format, headers=headers)
+    xml_string, response = resp.get_soup(format, proxies={'http': proxy, 'https': proxy})
+
     print(xml_string)
     data = []
 
