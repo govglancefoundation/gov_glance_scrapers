@@ -1,32 +1,38 @@
 [
     {
-        "id": "8148", 
-        "name": "Louisiana Municipal General Election", 
-        "electionDay": "2024-04-27", 
-        "ocdDivisionId": "ocd-division/country:us/state:la"
+        "id": "8163",
+        "name": "California Special Runoff Election",
+        "electionDay": "2024-05-21",
+        "ocdDivisionId": "ocd-division/country:us/state:ca"
     },
     {
-        "id": "8153", 
-        "name": "Indiana Primary Election", 
-        "electionDay": "2024-05-07", 
-        "ocdDivisionId": "ocd-division/country:us/state:in"
+        "id": "8164",
+        "name": "Idaho Primary Election",
+        "electionDay": "2024-05-21",
+        "ocdDivisionId": "ocd-division/country:us/state:id"
     },
     {
-        "id": "8155", 
-        "name": "Delaware School Board Election", 
-        "electionDay": "2024-05-14", 
-        "ocdDivisionId": "ocd-division/country:us/state:de"
+        "id": "8167",
+        "name": "Texas Democratic Primary Runoff Election",
+        "electionDay": "2024-05-28",
+        "ocdDivisionId": "ocd-division/country:us/state:tx"
     },
     {
-        "id": "8161", 
-        "name": "Rhode Island Special Referendum Election", 
-        "electionDay": "2024-05-07", 
-        "ocdDivisionId": "ocd-division/country:us/state:ri"
+        "id": "8168",
+        "name": "Texas Republican Primary Runoff Election",
+        "electionDay": "2024-05-28",
+        "ocdDivisionId": "ocd-division/country:us/state:tx"
     },
     {
-        "id": "8162", 
-        "name": "Michigan Consolidated Election", 
-        "electionDay": "2024-05-07", 
-        "ocdDivisionId": "ocd-division/country:us/state:mi"
+        "id": "8177",
+        "name": "Virginia Democratic Primary Election",
+        "electionDay": "2024-06-18",
+        "ocdDivisionId": "ocd-division/country:us/state:va"
+    },
+    {
+        "id": "8179",
+        "name": "Virginia Republican Primary Election",
+        "electionDay": "2024-06-18",
+        "ocdDivisionId": "ocd-division/country:us/state:va"
     }
 ]
