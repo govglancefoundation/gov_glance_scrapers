@@ -11,12 +11,12 @@ load_dotenv()
 
 
 def main():
-    url = 'https://www.estado.pr.gov/comunicados'           # url
-    table = 'Puerto Rico'   
-    schema = 'united_states_of_america'                                                                 # State name
+    url = 'https://eservicios2.aguascalientes.gob.mx/SSI/noticia.aspx'           # url
+    table = 'Aguascalientes'   
+    schema = 'mexico'                                                                 # State name
     topic = 'state'                                                 # The topic of the scraper
     link_variable_name = 'link'                                      # Whatever the link variable name might be
-    notification_title = 'Puerto Rico State Updates'                    # Notification title
+    notification_title = 'Aguascalientes State Updates'                    # Notification title
     item_name = 'article'                                           # Make sure that you using the right item tag name
     format = 'html.parser'
     # notify = SendNotification()
@@ -24,23 +24,26 @@ def main():
 
     resp = Response(table, topic, url, link_variable_name, item_name)
     response = resp.request_content()
-    soup = BeautifulSoup(response.content, format)
-    content = soup.find_all('div', {'class':'collection-item-2'})
-
+    soup = BeautifulSoup(response.content, 'html.parser')
+    content_table = soup.find('table')
+    content = content_table.find_all('tr', {'class': ['gridItem', 'gridAlternateItem']})
     data = []
-    print(len(content))
 
     """
     Edit the XML based on your needs
+    - Skip the first index of the list since its just headers of the table
     """
-    for item in content[:10]: 
+    for item in content[1:-1]: 
         item_dict = {}
+        tr = item.find_all('td')
+        print(len(tr))
 
-        if item.find('a') is not None:
-            item_dict['link'] = (item.find('a')['href']) # this is the pubDate
-            item_dict['title'] = item.find('a').text
-        if item.find('div') is not None:
-            item_dict['pubDate'] = (item.find('div',{'class', 'decretos-date'}).text)
+        item_dict['pubDate'] = tr[0].text
+        item_dict['bulletinNum'] = tr[1].text
+        item_dict['title'] = tr[2].text
+        item_dict['dependency'] = tr[3].text
+        item_dict['link'] = 'https://eservicios2.aguascalientes.gob.mx/SSI/noticia.aspx' +item.find('a')['href']
+        item_dict['description'] = item.find('div', {'class':'TextoVentanaDinamic'}).text
         data.append(item_dict)
 
     print(data)
@@ -58,13 +61,13 @@ def main():
         cleaned = clean_items(items)
         print(cleaned)
         WriteItems(schema=schema).process_item(cleaned, table, topic)
-    # #     # recent = notify.get_recent_value(cleaned)
-    # #     # message = notify.message(cleaned, recent['title'])
-    # #     # notify.notification_push(topic,notification_title, str(message))
+    # # #     # recent = notify.get_recent_value(cleaned)
+    # # #     # message = notify.message(cleaned, recent['title'])
+    # # #     # notify.notification_push(topic,notification_title, str(message))
         
-        logging.info(f'The total items needed for {table.title()} are: {number_of_items}')
-    else:
-        logging.info(f'No new items found for {table.title()}')
+    #     logging.info(f'The total items needed for {table.title()} are: {number_of_items}')
+    # else:
+    #     logging.info(f'No new items found for {table.title()}')
 
 
 
