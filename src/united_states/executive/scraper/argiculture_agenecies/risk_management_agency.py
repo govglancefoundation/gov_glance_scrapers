@@ -7,7 +7,7 @@ import xml.etree.ElementTree as ET
 
 
 def main():
-    url = "https://www.federalregister.gov/api/v1/documents.rss?conditions%5Bagencies%5D%5B%5D=economic-research-service"
+    url = "https://www.federalregister.gov/api/v1/documents.rss?conditions%5Bagencies%5D%5B%5D=risk-management-agency"
     table = 'environment'
     schema = 'united_states_of_america'
     topic = 'executive'
@@ -16,7 +16,7 @@ def main():
     item_name = 'item'
     format = 'xml'
     #notify = SendNotification()
-    agency_name = 'Economic Research Service'
+    agency_name = 'Risk Management Agency'
 
     resp = Response(table, topic, url, link_variable_name, item_name)
     xml_string, response = resp.get_soup(format)
@@ -27,7 +27,7 @@ def main():
     """
     Edit the XML based on your needs
     """
-    for item in xml_string[:1]: 
+    for item in xml_string[:10]: 
         print(item)
         entry_data = {}
         # Make sure to look for all the tags in content

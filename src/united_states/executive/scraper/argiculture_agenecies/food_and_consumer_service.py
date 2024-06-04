@@ -7,16 +7,16 @@ import xml.etree.ElementTree as ET
 
 
 def main():
-    url = "https://www.usda.gov/rss/home.xml"
+    url = "https://www.federalregister.gov/api/v1/documents.rss?conditions%5Bagencies%5D%5B%5D=food-and-consumer-service"
     table = 'environment'
     schema = 'united_states_of_america'
     topic = 'executive'
     link_variable_name = 'link'
-    notification_title = 'USDA Updates'
+    notification_title = ''
     item_name = 'item'
     format = 'xml'
     #notify = SendNotification()
-
+    agency_name = 'Food and Consumer Service'
 
     resp = Response(table, topic, url, link_variable_name, item_name)
     xml_string, response = resp.get_soup(format)
@@ -27,7 +27,7 @@ def main():
     """
     Edit the XML based on your needs
     """
-    for item in xml_string: 
+    for item in xml_string[:10]: 
         print(item)
         entry_data = {}
         # Make sure to look for all the tags in content
@@ -36,10 +36,16 @@ def main():
             if tag.name == 'enclosure':
                 entry_data['enclosure'] = item.find('enclosure')['url']
             if tag.name == 'creator':
-                entry_data['creator'] = item.find('creator').text
+                entry_data['creator'] = 'Agriculture Department'
+            if tag.name == 'category':
+                categories = item.find_all('category')
+                categories_text = [i.text for i in categories]
+                entry_data['category'] = str(categories_text)
             else:
                 text = tag.text.replace('\n', '')
                 entry_data[tag.name] = text
+            entry_data['agency'] = agency_name
+    
         data.append(entry_data)
 
     items = []
