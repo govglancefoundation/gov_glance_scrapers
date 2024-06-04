@@ -35,7 +35,7 @@ def main():
         item_dict = {}
 
 
-        item_dict['link'] = next(iter(item.absolute_links))
+        item_dict['link'] = list(item.find('a')[0].absolute_links)[0]
         title = item.text.split(' — ',1)[0].replace('\n','').rstrip().lstrip()
         item_dict['title'] = title
         item_dict['pubDate'] = item.text.replace(title,'').replace(' — ',' ').rstrip().lstrip()
