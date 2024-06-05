@@ -4,48 +4,40 @@ from response import Response
 from notification import SendNotification
 import logging
 import xml.etree.ElementTree as ET
-
+from bs4 import BeautifulSoup
 
 def main():
-    url = "https://www.federalregister.gov/api/v1/documents.rss?conditions%5Bagencies%5D%5B%5D=food-and-nutrition-service"
-    table = 'environment'
-    schema = 'united_states_of_america'
+    url = "https://api.io.canada.ca/io-server/gc/news/en/v2?minister=righthonjustinpjtrudeau&sort=publishedDate&orderBy=desc&publishedDate%3E=2021-10-25&pick=100&format=atom&atomtitle=Right%20Hon.%20Justin%20P.%20J.%20Trudeau"
+    table = 'prime_minister'
+    schema = 'canada'
     topic = 'executive'
     link_variable_name = 'link'
-    notification_title = ''
-    item_name = 'item'
+    notification_title = 'Prime Minister Updates'
+    item_name = 'entry'
     format = 'xml'
     #notify = SendNotification()
-    agency_name = 'Food and Nutrition Service'
 
-    resp = Response(table, topic, url, link_variable_name, item_name)
-    xml_string, response = resp.get_soup(format)
+
+    resp = Response('news_by_area', topic, url, link_variable_name, item_name)
+    response = resp.request_content()
+    xml_string = BeautifulSoup(response.content, 'xml')
+    name = xml_string.find('title').text
+    print(name)
     data = []
-
-
-
     """
     Edit the XML based on your needs
     """
-    for item in xml_string[:10]: 
-        print(item)
+    for item in xml_string.find_all('entry'):
         entry_data = {}
         # Make sure to look for all the tags in content
         tags = item.find_all()
-        for tag in tags:
-            if tag.name == 'enclosure':
-                entry_data['enclosure'] = item.find('enclosure')['url']
-            if tag.name == 'creator':
-                entry_data['creator'] = 'Agriculture Department'
-            if tag.name == 'category':
-                categories = item.find_all('category')
-                categories_text = [i.text for i in categories]
-                entry_data['category'] = str(categories_text)
-            else:
-                text = tag.text.replace('\n', '')
-                entry_data[tag.name] = text
-            entry_data['agency'] = agency_name
-    
+        entry_data['category'] = item.find('category')['term'].title()
+        entry_data['title'] = item.find('title').text
+        entry_data['description'] = item.find('summary').text
+        entry_data['author'] = item.find('author').text
+        entry_data['pubDate'] = item.find('updated').text
+        entry_data['link'] = item.find('link')['href']
+        entry_data['name'] = name
         data.append(entry_data)
 
     items = []
