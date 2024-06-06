@@ -18,7 +18,7 @@ def main():
     #notify = SendNotification()
 
 
-    resp = Response('news_by_area', topic, url, link_variable_name, item_name)
+    resp = Response('prime_mister', topic, url, link_variable_name, item_name)
     response = resp.request_content()
     xml_string = BeautifulSoup(response.content, 'xml')
     name = xml_string.find('title').text
