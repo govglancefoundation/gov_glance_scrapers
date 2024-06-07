@@ -27,7 +27,7 @@ def main():
     """
     Edit the XML based on your needs
     """
-    for item in xml_string[:4]: 
+    for item in xml_string[:10]: 
         print(item)
         entry_data = {}
         # Make sure to look for all the tags in content
