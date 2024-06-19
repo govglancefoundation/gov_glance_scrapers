@@ -2,6 +2,9 @@ import re
 import dateutil.parser
 import logging
 import html
+
+
+
 def camel_to_snake_case(key):
     """
     Convert camelCase string to snake_case, keeping only letters and numbers.
@@ -49,6 +52,39 @@ def clean_description(description):
     cleaned_text = pattern.sub('', cleaned_description).replace("●", "-").replace('• ', "")
     return cleaned_text
 
+def translate_date_string(date_str):
+    # Dictionaries for Spanish to English month and weekday names
+    spanish_to_english_months = {
+        'Enero': 'January', 'Febrero': 'February', 'Marzo': 'March', 'Abril': 'April',
+        'Mayo': 'May', 'Junio': 'June', 'Julio': 'July', 'Agosto': 'August',
+        'Septiembre': 'September', 'Octubre': 'October', 'Noviembre': 'November', 'Diciembre': 'December'
+    }
+    
+    spanish_to_english_weekdays = {
+    'Lunes': 'Monday', 'Martes': 'Tuesday', 'Miércoles': 'Wednesday', 'Jueves': 'Thursday',
+    'Viernes': 'Friday', 'Sábado': 'Saturday', 'Domingo': 'Sunday'
+    }
+
+    # Replace Spanish month names with English month names
+    for spanish_month, english_month in spanish_to_english_months.items():
+        date_str = date_str.replace(spanish_month, english_month)
+
+    # Replace Spanish weekday names with English weekday names
+    for spanish_weekday, english_weekday in spanish_to_english_weekdays.items():
+        date_str = date_str.replace(spanish_weekday, english_weekday)
+
+    return date_str
+
+def clean_date(date):
+    try: 
+        new_date = dateutil.parser.parse(date)
+        return new_date
+    except:
+        date = date.replace('de','')
+        split_dates = [i.title().replace(',','') for i in (date.split())]
+        new_date = dateutil.parser.parse(translate_date_string(' '.join(split_dates)))
+        return new_date
+
 
 class CleanUpProcess:
 
@@ -64,7 +100,7 @@ class CleanUpProcess:
                     if key == 'encoded':
                         item[key] = str(clean_description(html.unescape(val)))
                     if key == 'created_at':
-                        item[key] = str(dateutil.parser.parse(val))
+                        item[key] = str(clean_date(val))
                     if key == 'guid':
                         if isinstance(val, dict):
                             item[key] = val['#text']

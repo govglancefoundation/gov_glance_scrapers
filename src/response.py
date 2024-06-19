@@ -66,6 +66,9 @@ class Response:
         response = requests.get(self.link, proxies=proxies, headers=self.headers, verify=verify)
         return json.loads(response.content)[self.item_name], response
     
+    ''' 
+    This function should only return soup. Must modify the rest of the scripts so the change is reflected.
+    '''
     def get_soup(self, format, proxies=None,verify=None):
         requests = self.scrapeops_logger.RequestsWrapper()
         response = requests.get(self.link, proxies=proxies, headers=self.headers, verify=verify)

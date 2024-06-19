@@ -78,6 +78,8 @@ class WriteItems:
                 if 'description' not in item.keys():
                     columns.append("description VARCHAR")
                 
+                if 'category' not in item.keys():
+                    columns.append("category VARCHAR")
                 for key in item.keys():
                     if key == 'created_at':
                         columns.append(f'{key} timestamp with time zone')
@@ -105,11 +107,16 @@ class WriteItems:
                
                 columns = ', '.join(item.keys())
                 values = ', '.join('%({})s'.format(key) for key in item.keys())
-                print(item)
-                query = f"INSERT INTO {schema}.{table_name} ({columns}) VALUES ({values})"
+                query = f"INSERT INTO {schema}.{table_name} ({columns}) VALUES ({values}) RETURNING id;"
                 self.cur.execute(query, item)
-                self.connection.commit()
+                id_of_new_row = self.cur.fetchone()[0]
+                print(f"id for inserted item {id_of_new_row}")
+                query = f"INSERT INTO world_search_results (id, source, schema_source, ts) VALUES (%s, %s, %s, to_tsvector('english'::regconfig, %s));"
+                self.cur.execute(query, (id_of_new_row, table_name, schema, item['title'] ))
+
                 print(f"Item inserted to {schema}.{table_name}")
+                self.connection.commit()
+
         except errors.UndefinedColumn as err:
             # Handle the UndefinedTable exception here
             print(item)
