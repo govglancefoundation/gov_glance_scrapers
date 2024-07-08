@@ -62,7 +62,6 @@ class WriteItems:
             for item in items:
                 schema = self.schema
                 table_name = table.lower().replace(' ', '_')
-
                 print(table_name)
                 '''if table does not exist, create it'''
                 columns = []
@@ -83,6 +82,8 @@ class WriteItems:
                 for key in item.keys():
                     if key == 'created_at':
                         columns.append(f'{key} timestamp with time zone')
+                    elif key in ['table_summary', 'sessions']:
+                        columns.append(f'{key} jsonb')
                     else:
                         columns.append(f"{key} VARCHAR")
 

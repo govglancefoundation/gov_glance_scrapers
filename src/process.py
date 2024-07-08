@@ -2,7 +2,7 @@ import re
 import dateutil.parser
 import logging
 import html
-
+import json
 
 
 def camel_to_snake_case(key):
@@ -90,7 +90,7 @@ class CleanUpProcess:
 
     def process_item(self, item):
         try:
-            required_keys = ('url', 'title', 'created_at')
+            required_keys = {'url', 'title', 'created_at'}
             if set(required_keys).issubset(item.keys()):
                 for key, val in item.items():
                     if key == 'description':
@@ -101,6 +101,14 @@ class CleanUpProcess:
                         item[key] = str(clean_description(html.unescape(val)))
                     if key == 'created_at':
                         item[key] = str(clean_date(val))
+                    if key == 'table_summary':
+                        for tab_sum_key, tab_sum_val in val.items():
+                            if tab_sum_key == 'justices':
+                                justice_list = [item.lstrip().rstrip() for item in tab_sum_val[0].split(', ')]
+                                val[tab_sum_key]= justice_list
+                        item[key] = val
+                    if key in ['table_summary', 'sessions']:
+                        item[key] = json.dumps(val)
                     if key == 'guid':
                         if isinstance(val, dict):
                             item[key] = val['#text']
@@ -109,7 +117,7 @@ class CleanUpProcess:
                         item[key] = val.title()
                 return item
             else:
-                logging.critical("Critical: This item need required keys. Placing in txt file to investigate", item)
+                logging.critical("Critical: This item need required keys. Placing in txt file to investigate", set(required_keys).issubset(item.keys()))
                 with open('log/critical_items_add_to_db_manually.txt', 'a') as f:
                     f.write(str(item) + '\n')
         except Exception as e:
