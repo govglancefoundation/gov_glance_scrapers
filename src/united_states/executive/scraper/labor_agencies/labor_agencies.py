@@ -45,7 +45,7 @@ def main():
         """
         Edit the XML based on your needs
         """
-        for item in xml_string.find_all('item')[:10]: 
+        for item in xml_string.find_all('item'): 
             print(item)
             entry_data = {}
             # Make sure to look for all the tags in content
