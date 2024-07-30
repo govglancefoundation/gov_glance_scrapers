@@ -117,7 +117,7 @@ class CleanUpProcess:
                         item[key] = val.title()
                 return item
             else:
-                logging.critical("Critical: This item need required keys. Placing in txt file to investigate", set(required_keys).issubset(item.keys()))
+                logging.critical(f"Critical: This item need required keys\n ----------{item}--------. Placing in txt file to investigate", set(required_keys).issubset(item.keys()))
                 with open('log/critical_items_add_to_db_manually.txt', 'a') as f:
                     f.write(str(item) + '\n')
         except Exception as e:
@@ -141,3 +141,16 @@ def clean_items(content: list):
             pass
 
     return cleaned
+
+def clean_single_item(content: dict):
+    try:
+        item = convert_keys_to_snake_case(content)
+        """
+        replace any key you want. The variable name is the old key and the value is the new key
+        """
+        item = replace_key(item, pub_date='created_at', pdf='document_link') 
+        item = CleanUpProcess().process_item(item)
+        return item
+    except Exception as e:
+        logging.error(f'Error in processing item: {item}. Error: {e}')
+        pass
