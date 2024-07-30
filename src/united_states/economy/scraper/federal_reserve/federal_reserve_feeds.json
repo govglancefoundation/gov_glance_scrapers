@@ -1,0 +1,265 @@
+[
+    {
+        "Press Releases": [
+
+                {
+                    "title": "All Press Release",
+                    "url": "https://www.federalreserve.gov/feeds/press_all.xml",
+                    "media_type":"Press Releases"
+    
+                },
+                {
+                    "title": "Banking and Consumer Regulatory Policy",
+                    "url": "https://www.federalreserve.gov/feeds/press_bcreg.xml",
+                    "media_type":"Press Releases"
+    
+                },
+                {
+                    "title": "Enforcement Actions",
+                    "url": "https://www.federalreserve.gov/feeds/press_enforcement.xml",
+                    "media_type":"Press Releases"
+    
+                },
+                {
+                    "title": "Monetary Policy",
+                    "url": "https://www.federalreserve.gov/feeds/press_monetary.xml",
+                    "media_type":"Press Releases"
+    
+                },
+                {
+                    "title": "Orders on Banking Application",
+                    "url": "https://www.federalreserve.gov/feeds/press_orders.xml",
+                    "media_type":"Press Releases"
+    
+                },
+                {
+                    "title": "Other Announcements",
+                    "url": "https://www.federalreserve.gov/feeds/press_other.xml",
+                    "media_type":"Press Releases"
+                }
+        ]
+    },
+    {
+        "Speeches and Testimony": [
+            {
+                "title": "All Speeches",
+                "url": "https://www.federalreserve.gov/feeds/speeches.xml",
+                "media_type": "Speeches & Testimony"
+            },
+            {
+                "title": "All Testimony",
+                "url": "https://www.federalreserve.gov/feeds/testimony.xml",
+                "media_type": "Speeches & Testimony"
+            },
+            {
+                "title": "All Speeches and Testimony",
+                "url": "https://www.federalreserve.gov/feeds/speeches_and_testimony.xml",
+                "media_type": "Speeches & Testimony"
+            },
+            {
+                "title": "Chair Jerome H. Powell",
+                "url": "https://www.federalreserve.gov/feeds/s_t_powell.xml",
+                "media_type": "Speeches & Testimony"
+            },
+            {
+                "title": "Vice Chair Philip N. Powell",
+                "url": "https://www.federalreserve.gov/feeds/s_t_jefferson.xml",
+                "media_type": "Speeches & Testimony"
+            },
+            {
+                "title": "Vice Chair for Supervision Micheal S. Barr",
+                "url": "https://www.federalreserve.gov/feeds/s_t_barr.xml",
+                "media_type": "Speeches & Testimony"
+            },
+            {
+                "title": "Governor Michelle W. Bowman",
+                "url": "https://www.federalreserve.gov/feeds/m_w_Bowman.xml",
+                "media_type": "Speeches & Testimony"
+            },
+            {
+                "title": "Governor Lisa D. Cook",
+                "url": "https://www.federalreserve.gov/feeds/s_t_cook.xml",
+                "media_type": "Speeches & Testimony"
+            },
+            {
+                "title": "Governor Adriana D. Kugler",
+                "url": "https://www.federalreserve.gov/feeds/s_t_kugler.xml",
+                "media_type": "Speeches & Testimony"
+            },
+            {
+                "title": "Governor Christopher J. Waller",
+                "url": "https://www.federalreserve.gov/feeds/s_t_waller.xml",
+                "media_type": "Speeches & Testimony"
+            }           
+            
+        ]
+    },
+    {
+        "Other": [
+            {
+                "title": "Credit and Liquidity Programs and the Balance Sheet",
+                "url": "https://www.federalreserve.gov/feeds/clp.xml",
+                "media_type": "Other"
+            },
+            {
+                "title": "Current Frequently Asked Questions",
+                "url": "https://www.federalreserve.gov/feeds/currentfaqs.xml",
+                "media_type": "Other"
+            },
+            {
+                "title": "Office of Inspector General",
+                "url": "https://oig.federalreserve.gov/feeds/oig.xml",
+                "media_type": "Other"
+            },
+            {
+                "title": "Regulatory Reform",
+                "url": "https://www.federalreserve.gov/feeds/regreform.xml",
+                "media_type": "Other"
+            },
+            {
+                "title": "Board Meetings",
+                "url": "https://www.federalreserve.gov/feeds/boardmeetings.xml",
+                "media_type": "Other"
+            },
+            {
+                "title": "Reporting Forms",
+                "url": "https://www.federalreserve.gov/feeds/reportforms-rss.xml",
+                "media_type": "Other"
+            },
+            {
+                "title": "Supervision and Regulation and Consumer Affairs Letters, Supervision Manuals",
+                "url": "https://www.federalreserve.gov/feeds/bankinginfo-rss.xml",
+                "media_type": "Other"
+            },
+            {
+                "title": "Coronavirus Disease 2019 (COVID-19)",
+                "url": "https://www.federalreserve.gov/feeds/covid-19.xml",
+                "media_type": "Other"
+            }   
+        ]
+    },
+    {
+        "Research Paper Feeds":[
+            {
+                "title": "All Federal Reserve Board working papers",
+                "url": "https://www.federalreserve.gov/feeds/working_papers.xml",
+                "media_type": "Research Paper Feeds"
+            },
+            {
+                "title": "Finance and Economics Discussion Series",
+                "url": "https://www.federalreserve.gov/feeds/feds.xml",
+                "media_type": "Research Paper Feeds"
+            },
+            {
+                "title": "International Finance Discussion Papers",
+                "url": "https://www.federalreserve.gov/feeds/ifdp.xml",
+                "media_type": "Research Paper Feeds"
+            },
+            {
+                "title": "FEDS Notes",
+                "url": "https://www.federalreserve.gov/feeds/feds_notes.xml",
+                "media_type": "Research Paper Feeds"
+            }
+        ]
+    },
+    {
+        "Announcements": [
+            {
+                "title": "All Data Download announcements",
+                "url": "https://www.federalreserve.gov/feeds/datadownload.xml",
+                "media_type": "Announcements"
+            },
+            {
+                "title": "Aggregate Reserves of Depository Institution and the Monetary Base (H.3)",
+                "url": "https://www.federalreserve.gov/feeds/h3.html",
+                "media_type": "Announcements"
+            },
+            {
+                "title": "Assets and Liabilities of Commercial Banks in the United State (H.8)",
+                "url": "https://www.federalreserve.gov/feeds/h8.xml",
+                "media_type": "Announcements"
+            },
+            {
+                "title": "Charge-Off and Delinquency Rates",
+                "url": "https://www.federalreserve.gov/feeds/chgdel.xml",
+                "media_type": "Announcements"
+            },
+            {
+                "title": "Commercial Paper",
+                "url": "https://www.federalreserve.gov/feeds/cp.xml",
+                "media_type": "Announcements"
+            },
+            {
+                "title": "Consumer Credit",
+                "url": "https://www.federalreserve.gov/feeds/g19.xml",
+                "media_type": "Announcements"
+            },
+            {
+                "title": "Factors Affecting Reserve Balances (H.4.1)",
+                "url": "https://www.federalreserve.gov/feeds/h41.xml",
+                "media_type": "Announcements"
+            },
+            {
+                "title": "Finance Companies",
+                "url": "https://www.federalreserve.gov/feeds/g20.xml",
+                "media_type": "Announcements"
+            },
+            {
+                "title": "Financial Obligations Ratios",
+                "url": "https://www.federalreserve.gov/feeds/for.xml",
+                "media_type": "Announcements"
+            },
+            {
+                "title": "Financial Accounts of the United States (Z.1)",
+                "url": "https://www.federalreserve.gov/feeds/z1.xml",
+                "media_type": "Announcements"
+            },
+            {
+                "title": "Financial Accounts Guide",
+                "url": "https://www.federalreserve.gov/feeds/fofguide.xml",
+                "media_type": "Announcements"
+            },
+            {
+                "title": "Foreign Exchange Rates (G.5/H.10)",
+                "url": "https://www.federalreserve.gov/feeds/h10.xml",
+                "media_type": "Announcements"
+            },
+            {
+                "title": "Industrial Production and Capacity Utilization (G.17)",
+                "url": "https://www.federalreserve.gov/feeds/g17.xml",
+                "media_type": "Announcements"
+            },
+            {
+                "title": "Money Stock Measures (H.6)",
+                "url": "https://www.federalreserve.gov/feeds/h6.html",
+                "media_type": "Announcements"
+            },
+            {
+                "title": "Policy Rates",
+                "url": "https://www.federalreserve.gov/feeds/prates.xml",
+                "media_type": "Announcements"
+            },
+            {
+                "title": "Selected Interest Rates (H.15)",
+                "url": "https://www.federalreserve.gov/feeds/h15.xml",
+                "media_type": "Announcements"
+            },
+            {
+                "title": "Senior Credit Officer Opinion Survey on Dealer Financing Terms",
+                "url": "https://www.federalreserve.gov/feeds/scoos.xml",
+                "media_type": "Announcements"
+            },
+            {
+                "title": "Senior Loan Officer Opinion Survey on Bank Lending Practices",
+                "url": "https://www.federalreserve.gov/feeds/sloos.xml",
+                "media_type": "Announcements"
+            },
+            {
+                "title": "Survey of Terms of Business Lending (E.2)",
+                "url": "https://www.federalreserve.gov/feeds/e2.xml",
+                "media_type": "Announcements"
+            }
+        ]
+    }
+
+]

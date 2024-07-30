@@ -1,0 +1,31 @@
+[
+    {
+        "title": "Board Meetings",
+        "url": "https://www.federalreserve.gov/feeds/boardmeetings.xml",
+        "media_type": "Other"
+    },
+    {
+        "Statistics": [
+            {
+                "title": "Commercial Paper Outstandings",
+                "url": "https://www.federalreserve.gov/feeds/cp_outstanding.htm",
+                "media_type": "Statistics"
+            },
+            {
+                "title": "Commercial Paper Rates",
+                "url": "https://www.federalreserve.gov/feeds/cp_rates.htm",
+                "media_type": "Statistics"
+            },
+            {
+                "title": "Foreign Exchange Rates (H.10)",
+                "url": "https://www.federalreserve.gov/feeds/h10_data.htm",
+                "media_type": "Statistics"
+            },
+            {
+                "title": "Selected Interest Rates (H.15)",
+                "url": "https://www.federalreserve.gov/feeds/h15_data.htm",
+                "media_type": "Statistics"
+            }
+        ]
+    }
+]
